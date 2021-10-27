@@ -57,16 +57,19 @@ public class assignRPS {
         Scanner sc = new Scanner(System.in);
 
         // Ask for number of rounds
-        System.out.println("Enter number of rounds (1-10):");
-        // TO DO - check for invalid inputs
-        int numRounds = sc.nextInt();
+        // check for invalid inputs
+        int numRounds = 0;
+        do{
+            System.out.println("Enter number of rounds (1-10):");
+            
+            while (!sc.hasNextInt()){
+                numRounds = sc.nextInt();
+                System.out.println("Not a valid input");
+            }
+            numRounds = sc.nextInt();
 
-        if (numRounds < 1 || numRounds > 10){
-            System.out.println("Outside range, exiting.");
-            System.exit(0);
-        }
+        }while(numRounds < 1 || numRounds > 10);
 
-        // sc.close();
         return numRounds;
     }
 
