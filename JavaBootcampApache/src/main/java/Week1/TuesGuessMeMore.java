@@ -28,5 +28,6 @@ public class TuesGuessMeMore {
         }
         while (userNum != genNum);
         System.out.println("You win");
+        sc.close();
     }
 }
