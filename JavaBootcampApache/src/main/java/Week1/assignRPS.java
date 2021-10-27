@@ -3,12 +3,15 @@ import java.util.Scanner;
 
 public class assignRPS {
 
+    // Where the game starts
     public static void start(){
+        // ask user for number of rounds
         int numRounds = setRounds();
         int ties = 0;
         int userWins = 0;
         int userLosses = 0;
 
+        // Play each round and keep track of win/tie/loss
         for (int i = 0; i < numRounds; i++){
             System.out.println("Round " + (i+1) + ":");
             int result = playRound();
@@ -31,6 +34,9 @@ public class assignRPS {
             System.out.println("Wins: " + userWins + ", Ties: " + ties + ", Losses: " + userLosses + "\n");
         }
 
+        // Once all rounds are played
+        // Display final result according to wins/losses
+        // End of game
         if (userWins > userLosses){
             System.out.println("You win the game! :)");
             System.exit(0);
@@ -45,12 +51,14 @@ public class assignRPS {
         }
     }
 
+    // Ask user to enter num of rounds, returns it.
+    // If ouside range, exit
     public static int setRounds(){
         Scanner sc = new Scanner(System.in);
 
         // Ask for number of rounds
         System.out.println("Enter number of rounds (1-10):");
-        // check for invalid inputs
+        // TO DO - check for invalid inputs
         int numRounds = sc.nextInt();
 
         if (numRounds < 1 || numRounds > 10){
@@ -84,6 +92,35 @@ public class assignRPS {
         return choiceNum;
     }
 
+    // Main game logic
+    // Request user to choose R, P, or S. Generate computer choice
+    // Compare and return winner
+    /*
+    GAME LOGIC:
+    Rock = 1
+    Paper = 2
+    Scissors = 3
+
+    By calculating choiceDiff = (userChoice - computerChoice), the difference 
+    is telling of the winner. 
+    
+    if:
+        user chooses paper (2) and
+        NPC chooses rock (1)
+        paper - rock = 2 - 1 = 1 = USER WIN
+
+    That is choiceDiff.
+
+    By checking all possible scenarios, a choiceDiff table can be made:
+        user WIN if -2 or 1
+        user TIE if 0
+        user LOSE if -1 or 2
+    
+    method returns winner of round:
+        1 = user wins
+        0 = user ties
+        -1 = user loses
+    */
     public static int playRound(){
         int userChoice = userChoice();
 
@@ -93,39 +130,35 @@ public class assignRPS {
         System.out.println("You: " + intToRPS(userChoice));
         System.out.println("Computer: " + intToRPS(npcChoice));
 
-        int userResult = userChoice - npcChoice;
+        int choiceDiff = userChoice - npcChoice;
         int winloss = 0;
 
-        switch(userResult){
+        switch(choiceDiff){
             case 1:
-                // System.out.println("You win this round!");
+                // WIN
                 winloss = 1;
                 break;
             case -2:
-                // System.out.println("You win this round!");
+                // WIN
                 winloss = 1;
                 break;
             case 0:
-                // System.out.println("You tied this round!");
+                // TIE
                 winloss = 0;
                 break;
-            case -1:
-                // System.out.println("You lost this round!");
+            case -1: 
+                // LOSE
                 winloss = -1;
                 break;
             case 2:
-                // System.out.println("You win this round!");
+                // LOSE
                 winloss = -1;
                 break;
         }
-
         return winloss;
-        // Return 1 = user wins
-        // Return 0 = user ties
-        // Return -1 = user loses
-        // Rock   Paper   Scissors
-        // 1      2        3
+        
 
+        // All scenarios:
         // user - npc
         // rock - paper = 1 - 2 = -1 LOSE
         // rock - rock = 0 = TIE
@@ -138,13 +171,9 @@ public class assignRPS {
         // scissors - paper = 3 - 2 = 1 WIN
         // scissors - rock = 3 - 1 = 2 LOSE
         // scissors - scissors = 3 - 3 = TIE
-
-        // WIN -> -2, 1
-        // TIE -> 0
-        // LOSE -> -1, 2
-
     }
 
+    // Translate from 1, 2, 3 to Rock, paper, or scissors
     public static String intToRPS(int rpsVal){
         String rps = "a";
         switch(rpsVal){
