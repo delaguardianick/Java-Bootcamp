@@ -62,7 +62,16 @@ public class assignRPS {
         do{
             System.out.println("Enter number of rounds (1-10):");
             
+            // try{
+            //     if (!sc.hasNextInt()){
+            //         numRounds = sc.nextInt();
+            //     }
+            // }
+            // catch(Exception e){
+            //     System.out.println("Please enter a number");
+            // }
             while (!sc.hasNextInt()){
+                
                 numRounds = sc.nextInt();
                 System.out.println("Not a valid input");
             }
@@ -75,9 +84,13 @@ public class assignRPS {
 
     public static int userChoice(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Choose r, p or s - (Rock) (Paper) (Scissors)");
+        String choiceStr = "";
+        do {
+            System.out.println("Choose r, p or s - (Rock) (Paper) (Scissors)");
+            choiceStr = sc.next();
+
+        }while(!(choiceStr.equals("r") || choiceStr.equals("p") || choiceStr.equals("s")));
         // check for invalid input
-        String choiceStr = sc.next();
         // System.out.println("input: " + choiceStr.strip());
         int choiceNum = -1;
 
