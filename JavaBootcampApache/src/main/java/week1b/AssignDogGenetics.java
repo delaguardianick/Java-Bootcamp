@@ -1,3 +1,6 @@
+package week1b;
+
+import Week1.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Random;

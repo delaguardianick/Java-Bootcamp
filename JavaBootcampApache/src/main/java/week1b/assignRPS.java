@@ -1,3 +1,6 @@
+package week1b;
+
+import Week1.*;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -94,19 +97,8 @@ public class assignRPS {
         }while(!(choiceStr.equals("r") || choiceStr.equals("p") || choiceStr.equals("s")));
         // check for invalid input
         // System.out.println("input: " + choiceStr.strip());
-        int choiceNum = -1;
 
-        switch(choiceStr){
-            case "r":
-                choiceNum = 1;
-                break;
-            case "p":
-                choiceNum = 2;
-                break;
-            case "s":
-                choiceNum = 3;
-                break;
-        };
+        int choiceNum = rpsToInt(choiceStr);
         return choiceNum;
     }
 
@@ -207,6 +199,25 @@ public class assignRPS {
         }
         return rps;
     }
+
+    public static int rpsToInt(String choiceStr){
+        int choiceNum = -1;
+
+        switch(choiceStr){
+            case "r":
+                choiceNum = 1;
+                break;
+            case "p":
+                choiceNum = 2;
+                break;
+            case "s":
+                choiceNum = 3;
+                break;
+        }
+        return choiceNum;
+    }
+
+
 
     public static void main(String[] args) {
         start();
