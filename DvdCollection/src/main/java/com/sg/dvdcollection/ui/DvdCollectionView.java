@@ -13,21 +13,26 @@ import java.util.List;
 
 /**
  *
- * @author Gordak
+ * View of the application
  */
 public class DvdCollectionView {
     
-    private UserIO io = new UserIOConsoleImpl();
+    private UserIO io;
+    
+//    constructor to implement corresponding inteface
+    public DvdCollectionView(UserIO io){
+        this.io = io;
+    }
 
+//    prints the menu
     public int printMenuAndGetSelection(){
-        
         io.print("Main Menu");
         io.print("1. List all DVDs");
         io.print("2. Add DVD to collection");
         io.print("3. Search and display DVD info");
         io.print("4. Delete DVD from collection");
         io.print("5. Edit DVD info");
-        io.print("6. Reset collection from file");            
+        io.print("6. Load collection from file");            
         io.print("7. Save collection to file");
         io.print("8. Exit");
 
@@ -35,6 +40,7 @@ public class DvdCollectionView {
                 "above choices.", 1, 8);
     }
     
+//    prompt user for information of new DVD being added
     public Dvd getNewDvdInfo(){
         String title = io.readString("Enter the title of the DVD: ");
         String releaseDate = io.readString("Enter the Release Date: ");
@@ -62,15 +68,10 @@ public class DvdCollectionView {
         io.readString("DVD successfully added. Please hit enter to continue");
     }
     
+//    Lists all dvds in the collection and their information
     public void listDvdCollection(List<Dvd> dvdList){
         for (Dvd currentDvd : dvdList){
             displayDvdInfo(currentDvd);
-//            String dvdInfo = String.format("Title: %s\n"
-//                    + "Release Date: %s \n", 
-//                    currentDvd.getTitle(),
-//                    currentDvd.getReleaseDate());
-//            
-//            io.print(dvdInfo);
         }
         io.readString("Please hit enter to continue");
     }
@@ -79,11 +80,12 @@ public class DvdCollectionView {
         io.print("=== Displaying all DVDs ===");
     }
     
-    public String searchDvd(){
+    public String inputTitleToSearch(){
         String title = io.readString("Enter title of DVD to search: ");
         return title;
     }
     
+//    Displays information for 1 dvd object
     public void displayDvdInfo(Dvd reqDvd){
         String dvdInfo = String.format("Title: %s \n"
                     + "1. Release Date: %s \n"
@@ -103,9 +105,9 @@ public class DvdCollectionView {
         io.print(dvdInfo);
     }
     
+//  prompts user which information they want to change for a dvd record
+//  and changes the object's properties to reflect it
     public void editDvd(Dvd currDvd){
-//        String resp = io.readString("Would you like to edit this DVD's "
-//                + "information? (y/n)");
         String resp = "y";
         
         while (resp.equals("y")){
@@ -150,7 +152,8 @@ public class DvdCollectionView {
         }
     }
     
-    public Boolean removeDvd(){
+//  confirms if user wants to remove DVD from collection
+    public Boolean confirmRemoveDvd(){
         String resp = io.readString("Are you sure you want to "
                 + "remove this DVD? (y/n)");
         
@@ -169,5 +172,18 @@ public class DvdCollectionView {
     
     public void displayExitBanner(){
         io.print("Bye!");
+    }
+    
+    public void displayErrorMessage(String errorMsg){
+        io.print("===ERROR===");
+        io.print(errorMsg);       
+    }
+    
+    public void displayCollectionLoaded(){
+        io.print("Collection succesfully loaded from the file");
+    }
+    
+    public void displayCollectionSavedToFile(){
+        io.print("Collection succesfully saved to the file");
     }
 }

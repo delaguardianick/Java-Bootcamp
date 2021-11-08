@@ -5,14 +5,24 @@
  */
 package com.sg.dvdcollection;
 import com.sg.dvdcollection.controller.DvdCollectionController;
+import com.sg.dvdcollection.dao.*;
+import com.sg.dvdcollection.ui.*;
+        
 /**
- *
- * @author Gordak
+ * Main driver of the application
+  Creates instances for the DAO, View and UserIO with 
+  loosely coupled and corresponding implementations
  */
+  
 public class App {
-    
+
+
     public static void main(String[] args){
-        DvdCollectionController controller = new DvdCollectionController();
+        dvdCollectionDao myDao = new DvdCollectionDaoFileImpl();
+        UserIO myIo = new UserIOConsoleImpl();
+        DvdCollectionView myView = new DvdCollectionView(myIo);
+        DvdCollectionController controller = 
+                new DvdCollectionController(myDao, myView);
         controller.run();
     }
 }

@@ -5,6 +5,7 @@
  */
 package com.sg.dvdcollection.controller;
 
+import com.sg.dvdcollection.dao.DvdCollectionDaoException;
 import com.sg.dvdcollection.dao.DvdCollectionDaoFileImpl;
 import com.sg.dvdcollection.dao.dvdCollectionDao;
 import com.sg.dvdcollection.dto.Dvd;
@@ -14,94 +15,137 @@ import java.util.List;
 
 /**
  *
- * @author Gordak
+ * Controller of the application
+ * delegates the work to the DAO and VIEW
  */
 public class DvdCollectionController {
     
     private UserIO io = new UserIOConsoleImpl();
-    private DvdCollectionView view = new DvdCollectionView();
-    private dvdCollectionDao dao = new DvdCollectionDaoFileImpl();
     
+//    Tightly coupled dependency injection:
+//    private dvdCollectionDao dao = new DvdCollectionDaoFileImpl();
+//    private DvdCollectionView view = new DvdCollectionView();
+    
+//    Loosely coupled dependency injection: + constructor
+    private DvdCollectionView view;
+    private dvdCollectionDao dao;
+    
+    public DvdCollectionController(dvdCollectionDao dao, 
+            DvdCollectionView view){
+        this.dao = dao;
+        this.view = view;
+    }
+    
+//  main function
+//  displays menu and calls appropiate functions in the dao and view
     public void run() {
         boolean keepGoing = true;
         int menuSelection = 0;
         
+        try{
+            
         while (keepGoing){
             menuSelection = getMenuSelection();
             
             switch (menuSelection) {
                 case 1:
-//                    io.print("List DVDs");
                     listDvds();
                     break;
                 case 2:
-//                    io.print("Add DVD");
                     addDvd();
                     break;
                 case 3:
-//                    io.print("Search DVD");
                     searchAndDisplayDvd();
                     break;
                 case 4:
-//                    io.print("Delete DVD");
                     removeDvd();
                     break;    
                 case 5:
-//                    io.print("Edit DVD");
                     editDvd();
                     break;
                 case 6:
-                    io.print("Reset Collection");
+                    loadCollection();
                     break;
                 case 7:
-                    io.print("Save Collection");
+                    saveCollection();
                     break;
                 case 8:
                     keepGoing = false;
                     break;
                 default:
-                    view.displayUnknownCommandBanner();
+                    unknownCommand();
             }
         }
-        view.displayExitBanner();
+        saveCollection();
+        exitMessage();
+        }catch(DvdCollectionDaoException e){
+            view.displayErrorMessage(e.getMessage());
+        }
     }
     
     private int getMenuSelection() {
         return view.printMenuAndGetSelection();
     }
     
-    private void addDvd() {
+//    adds a dvd to the collection
+    private void addDvd() throws DvdCollectionDaoException {
         view.displayCreateDvdBanner();
         Dvd newDvd = view.getNewDvdInfo();
         dao.addDvd(newDvd.getTitle(), newDvd);
         view.displayCreateSuccessBanner();
     }
     
-    private void listDvds() {
+//    lists all dvds in the collection
+    private void listDvds() throws DvdCollectionDaoException{
         view.displayListCollectionBanner();
         List<Dvd> dvdList = dao.getAllDvds();
         view.listDvdCollection(dvdList);
     }
     
-    private Dvd searchAndDisplayDvd(){
-        String title = view.searchDvd();
-        Dvd currDvd = dao.searchDvd(title);
-        view.displayDvdInfo(currDvd);
-        return currDvd;
+//    searches and displays info of a specific dvd in the collection
+    private Dvd searchAndDisplayDvd() throws DvdCollectionDaoException {
+        String title = view.inputTitleToSearch();
+        Dvd currDvd;
+        try {
+            currDvd = dao.searchDvd(title);
+            view.displayDvdInfo(currDvd);
+            return currDvd;
+
+        }
+        catch (DvdCollectionDaoException e){
+            throw new DvdCollectionDaoException("Dvd not found");
+        }
     }
     
-    private void editDvd(){     
+//    edits a specific dvd in the collection
+    private void editDvd() throws DvdCollectionDaoException{     
         Dvd currDvd = searchAndDisplayDvd();
         view.editDvd(currDvd);
+        dao.saveCollection();
     }    
     
-    private void removeDvd(){
+//    removes a dvd from the collection
+    private void removeDvd() throws DvdCollectionDaoException{
 //        Dvd currDvd = searchAndDisplayDvd();
-        String title = view.searchDvd();
-        Boolean delete = view.removeDvd();
+        String title = view.inputTitleToSearch();
+        Boolean delete = view.confirmRemoveDvd();
         if (delete){
             dao.removeDvd(title);
         }
+    }
+    
+//    loads the collection from an external file into a hashmap
+//    unmarhsalls data
+    private void loadCollection() throws DvdCollectionDaoException{
+        dao.loadCollection();
+        view.displayCollectionLoaded();
+    }
+    
+//    saves the collection of dvds in a hashmap to an external txt file
+//    marshalls data
+    private void saveCollection() throws DvdCollectionDaoException{
+        dao.saveCollection();
+        view.displayCollectionSavedToFile();
     }
     
     public void unknownCommand(){
@@ -110,5 +154,9 @@ public class DvdCollectionController {
     
     public void exitMessage(){
         view.displayExitBanner();
+    }
+    
+    public void errorMessage(String errorMsg){
+        view.displayErrorMessage(errorMsg);
     }
 }
