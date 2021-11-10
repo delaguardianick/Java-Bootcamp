@@ -6,7 +6,15 @@
 package com.sg.vendingmachine.controller;
 
 import com.sg.vendingmachine.dao.VendingMachineDao;
+import com.sg.vendingmachine.dao.VendingMachineDaoException;
+import com.sg.vendingmachine.dao.VendingMachineDaoFileImpl;
+import com.sg.vendingmachine.dto.Item;
+import com.sg.vendingmachine.service.VendingMachineServiceLayer;
+import com.sg.vendingmachine.ui.UserIO;
+import com.sg.vendingmachine.ui.UserIOConsoleImpl;
 import com.sg.vendingmachine.ui.VendingMachineView;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  *
@@ -14,21 +22,32 @@ import com.sg.vendingmachine.ui.VendingMachineView;
  */
 public class VendingMachineController {
     
-        
         private VendingMachineView view;
-        private VendingMachineDao dao;
+        private VendingMachineServiceLayer service;
+        private VendingMachineDao dao = new VendingMachineDaoFileImpl();
+        private UserIO io = new UserIOConsoleImpl();
 
-        public VendingMachineController(VendingMachineDao dao, 
+
+        public VendingMachineController(VendingMachineServiceLayer service, 
                 VendingMachineView view){
-            this.dao = dao;
+            this.service = service;
             this.view = view;
     }
         
-        public void run(){
+        public void run() throws VendingMachineDaoException{
             printMenu();
+            userInsertMoney();
+            
     }
         
-        public void printMenu(){
-            view.printMenu();
+        public void printMenu() throws VendingMachineDaoException {
+            List<Item> items = service.getAllItems();
+            view.printMenu(items);
+        }
+        
+        public void userInsertMoney(){
+            BigDecimal balance = view.insertMoney();
+            service.createBalance(balance);
+            view.displayTotalBalance(balance);
         }
 }

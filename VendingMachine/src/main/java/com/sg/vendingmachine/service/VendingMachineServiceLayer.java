@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sg.vendingmachine.dao;
+package com.sg.vendingmachine.service;
 
+import com.sg.vendingmachine.dao.VendingMachineDaoException;
 import com.sg.vendingmachine.dto.Item;
-import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Gordak
  */
-public interface VendingMachineDao {
+public interface VendingMachineServiceLayer {
     
     void purchaseItem();
     
@@ -26,9 +26,10 @@ public interface VendingMachineDao {
     
     Item unmarshallItem(String itemAsText);
     
-   List<Item> getAllItems() throws VendingMachineDaoException;
-   
-   void modifyBalance(BigDecimal modifier); 
+    List<Item> getAllItems() throws VendingMachineDaoException;
+    
+    void modifyBalance(BigDecimal modifier);
 
     public void createBalance(BigDecimal balance);
+        
 }
