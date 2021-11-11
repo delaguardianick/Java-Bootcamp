@@ -6,6 +6,7 @@
 package com.sg.vendingmachine.dao;
 
 import com.sg.vendingmachine.dto.Item;
+import com.sg.vendingmachine.dto.Money;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,5 +31,9 @@ public interface VendingMachineDao {
    
    void modifyBalance(BigDecimal modifier); 
 
-    public void createBalance(BigDecimal balance);
+    void createBalance(BigDecimal balance);
+    
+    int getNumberOfItemsAvailable();
+    
+    Money getTotalBalance();
 }

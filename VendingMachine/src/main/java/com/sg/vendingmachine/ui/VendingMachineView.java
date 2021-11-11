@@ -22,9 +22,17 @@ public class VendingMachineView {
     }
     
     public void printMenu(List<Item> items){
+        int count = 1;
         for (Item item : items){
-            io.print(String.format("%s - $%s - %d units left.", 
-                    item.getName(), item.getPrice(), item.getUnitsInStock()));
+//            if (item.getUnitsInStock() == 0){
+//                count++;
+//                continue;
+//            }
+            io.print(String.format("%d: %s - $%s - %d units left.", 
+                    count, item.getName(), item.getPrice(), 
+                    item.getUnitsInStock()));
+            
+            count++;
         }
     }
     
@@ -40,5 +48,21 @@ public class VendingMachineView {
     
     public void displayTotalBalance(BigDecimal balance){
         io.print(String.format("You have $%s remaining",balance.toString()));
+    }
+    
+    public int userSelectItem(int max){
+        int itemNumber = io.readInt("Select item to dispense",1, max);
+        return itemNumber;
+    }
+    
+    public void displayItemDispensed(Item itemSelected){
+        io.print(String.format("Dispensing %s...", itemSelected.getName()));
+        io.print(String.format("Price: %s", itemSelected.getPrice()));
+        
+    }
+
+    public void displayChangeToBeReturned(String change) {
+        io.print(String.format("Change to be returned: %s",
+                    change));
     }
 }

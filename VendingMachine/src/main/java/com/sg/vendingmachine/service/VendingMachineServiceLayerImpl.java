@@ -8,6 +8,7 @@ package com.sg.vendingmachine.service;
 import com.sg.vendingmachine.dao.VendingMachineDao;
 import com.sg.vendingmachine.dao.VendingMachineDaoException;
 import com.sg.vendingmachine.dto.Item;
+import com.sg.vendingmachine.dto.Money;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -67,6 +68,25 @@ public class VendingMachineServiceLayerImpl implements
     @Override
     public void createBalance(BigDecimal balance) {
         dao.createBalance(balance);
+    }
+
+    @Override
+    public int getNumberOfItemsAvailable() {
+        return dao.getNumberOfItemsAvailable();
+    }
+
+//    @Override
+//    public void getItem(int itemNumber) {
+//        return dao.getItem(int itemNumber);
+//    }
+
+    @Override
+    public Money getChangeInPennies(String price) {
+        Money totalBalance = dao.getTotalBalance();
+        Money itemPrice = new Money(price);
+        
+//        return itemPrice;
+        return totalBalance.subtract(itemPrice);
     }
     
 }

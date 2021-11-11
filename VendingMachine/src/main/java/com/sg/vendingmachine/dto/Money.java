@@ -13,6 +13,12 @@ import java.math.BigDecimal;
  */
 public class Money {
     private BigDecimal balance;
+    private int dollars;
+    private int quarters;
+    private int dimes;
+    private int nickles;
+    private int pennies;
+
     
     public Money(String balance){
         BigDecimal balanceBD = new BigDecimal(balance);
@@ -35,5 +41,16 @@ public class Money {
         this.balance = this.balance.add(modifier);
     }
     
+    public Money subtract(Money itemPrice){
+        return new Money(this.balance.subtract(itemPrice.getBalance()));
+    }
+    
+    public String toString(){
+        return this.balance.toString();
+    }
+    
+    public void splitInCoins(){
+        int quarters = balance 
+    }
     
 }

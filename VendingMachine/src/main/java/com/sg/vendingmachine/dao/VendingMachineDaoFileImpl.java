@@ -115,7 +115,14 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
         totalBalance.setBalance(balance);
     }
 
-    
+    @Override
+    public int getNumberOfItemsAvailable(){
+        return vendingMachine.size();
+    }
+
+    public Money getTotalBalance() {
+        return this.totalBalance;
+    }
 
    
     

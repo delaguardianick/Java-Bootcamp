@@ -2,4 +2,5 @@ Coffee::2.00::3
 Chips::3.99::1
 Snack Bar::2.50::4
 Water::1.50::2
+Juice::2.15::0
 Chocolate::3.99::3

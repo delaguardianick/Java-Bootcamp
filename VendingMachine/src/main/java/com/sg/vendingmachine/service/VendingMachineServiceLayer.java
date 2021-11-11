@@ -7,6 +7,7 @@ package com.sg.vendingmachine.service;
 
 import com.sg.vendingmachine.dao.VendingMachineDaoException;
 import com.sg.vendingmachine.dto.Item;
+import com.sg.vendingmachine.dto.Money;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -31,5 +32,12 @@ public interface VendingMachineServiceLayer {
     void modifyBalance(BigDecimal modifier);
 
     public void createBalance(BigDecimal balance);
+    
+    int getNumberOfItemsAvailable();
+
+//    public void getItem(int itemNumber);
+
+    Money getChangeInPennies(String price);
+
         
 }
