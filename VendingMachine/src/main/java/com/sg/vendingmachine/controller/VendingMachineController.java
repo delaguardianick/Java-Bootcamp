@@ -37,15 +37,16 @@ public class VendingMachineController {
         
         public void run() throws VendingMachineDaoException{
             printMenu();
-            userInsertMoney();
+            BigDecimal balance = userInsertMoney();
+            Money VMBalance = new Money(balance);
             Item currItem = selectItem();
             dispenseItem(currItem);
             
-            String price = currItem.getPrice();
-            Money change = service.getChangeInPennies(price);
-            totalChangeToBeReturned(change);
+            Money itemPrice = new Money(currItem.getPrice());
+            Money totalChange = VMBalance.subtract(itemPrice);
             
-            
+//            Money totalChange = service.getChangeInPennies(itemPrice);
+            returnChange(totalChange);
         }
         
         public void printMenu() throws VendingMachineDaoException {
@@ -53,10 +54,11 @@ public class VendingMachineController {
             view.printMenu(items);
         }
         
-        public void userInsertMoney(){
+        public BigDecimal userInsertMoney(){
             BigDecimal balance = view.insertMoney();
-            service.createBalance(balance);
-            view.displayTotalBalance(balance);
+            Money totalBalance = service.createBalance(balance);
+            view.displayTotalBalance(totalBalance);
+            return balance;
         }
         
         public Item selectItem() throws VendingMachineDaoException{
@@ -72,11 +74,13 @@ public class VendingMachineController {
             view.displayItemDispensed(currItem);
         }
         
-        public void dispenseChange(String price){
-            service.getChangeInPennies(price);
-        }
+//        public void dispenseChange(String price){
+//            service.getChangeInPennies(price);
+//        }
         
-        public void totalChangeToBeReturned(Money change){
-            view.displayChangeToBeReturned(change.toString());
+        public void returnChange(Money change){
+            view.displayChangeToBeReturned(change);
+            int[] changeInCoins = change.splitInCoins();
+            view.displayChangeInCoins(changeInCoins);
         }
 }

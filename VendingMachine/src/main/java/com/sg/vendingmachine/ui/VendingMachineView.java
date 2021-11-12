@@ -6,6 +6,7 @@
 package com.sg.vendingmachine.ui;
 
 import com.sg.vendingmachine.dto.Item;
+import com.sg.vendingmachine.dto.Money;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -46,8 +47,9 @@ public class VendingMachineView {
         return new BigDecimal(moneyEntered);
     }
     
-    public void displayTotalBalance(BigDecimal balance){
-        io.print(String.format("You have $%s remaining",balance.toString()));
+    public void displayTotalBalance(Money balance){
+        io.print(String.format("You have $%s remaining",
+                balance.getAsTwoDecimals().toString()));
     }
     
     public int userSelectItem(int max){
@@ -61,8 +63,45 @@ public class VendingMachineView {
         
     }
 
-    public void displayChangeToBeReturned(String change) {
+    public void displayChangeToBeReturned(Money change) {
+        String changeString = change.getAsTwoDecimals().toString();
         io.print(String.format("Change to be returned: %s",
-                    change));
+                    changeString));
+    }
+
+    public void displayChangeInCoins(int[] changeInCoins) {
+        
+        String toDisplay = "";
+        for (int i=0; i < changeInCoins.length; i++){
+            int numOfCoins = changeInCoins[i];
+            
+            if (numOfCoins == 0){
+                continue;
+            }
+            String temp = "";
+            switch(i){
+                case 0:
+                    temp = String.format("%d dollars", numOfCoins);
+                    break;
+                
+                case 1:
+                    temp = String.format("%d quarters", numOfCoins);
+                    break;
+                  
+                case 2:
+                    temp = String.format("%d dimes", numOfCoins);
+                    break;
+                  
+                case 3:
+                    temp = String.format("%d nickels", numOfCoins);
+                    break;
+                    
+                case 4:
+                    temp = String.format("%d pennies", numOfCoins);
+                    break;
+            }
+            toDisplay += temp + ", ";
+        }
+        io.print(toDisplay);
     }
 }

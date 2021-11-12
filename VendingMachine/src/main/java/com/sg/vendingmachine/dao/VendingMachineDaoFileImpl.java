@@ -111,8 +111,9 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
     }
 
     @Override
-    public void createBalance(BigDecimal balance) {
+    public Money createBalance(BigDecimal balance) {
         totalBalance.setBalance(balance);
+        return totalBalance;
     }
 
     @Override

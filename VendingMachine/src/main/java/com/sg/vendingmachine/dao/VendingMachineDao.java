@@ -31,7 +31,7 @@ public interface VendingMachineDao {
    
    void modifyBalance(BigDecimal modifier); 
 
-    void createBalance(BigDecimal balance);
+    Money createBalance(BigDecimal balance);
     
     int getNumberOfItemsAvailable();
     

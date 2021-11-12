@@ -66,8 +66,8 @@ public class VendingMachineServiceLayerImpl implements
     }
 
     @Override
-    public void createBalance(BigDecimal balance) {
-        dao.createBalance(balance);
+    public Money createBalance(BigDecimal balance) {
+        return dao.createBalance(balance);
     }
 
     @Override
@@ -81,12 +81,18 @@ public class VendingMachineServiceLayerImpl implements
 //    }
 
     @Override
-    public Money getChangeInPennies(String price) {
+    public Money getChangeInPennies(Money itemPrice) {
         Money totalBalance = dao.getTotalBalance();
-        Money itemPrice = new Money(price);
+//        Money itemPrice = new Money(price);
         
 //        return itemPrice;
         return totalBalance.subtract(itemPrice);
     }
+    
+    @Override
+    public void changeInCoins(Money totalChange){
+        
+    }
+
     
 }

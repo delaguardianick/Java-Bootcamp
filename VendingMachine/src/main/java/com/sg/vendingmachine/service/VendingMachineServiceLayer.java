@@ -31,13 +31,16 @@ public interface VendingMachineServiceLayer {
     
     void modifyBalance(BigDecimal modifier);
 
-    public void createBalance(BigDecimal balance);
+    public Money createBalance(BigDecimal balance);
     
     int getNumberOfItemsAvailable();
 
 //    public void getItem(int itemNumber);
 
-    Money getChangeInPennies(String price);
+    public Money getChangeInPennies(Money itemPrice);
+
+
+    public void changeInCoins(Money totalChange);
 
         
 }
