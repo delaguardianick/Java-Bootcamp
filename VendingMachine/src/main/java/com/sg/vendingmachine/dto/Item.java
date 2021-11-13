@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  */
 public class Item {
     private String name;
-    private BigDecimal price;
+    private Money price;
     private int unitsInStock;
     
     public Item(String name){
@@ -31,10 +31,14 @@ public class Item {
     public String getPrice() {
         return this.price.toString();
     }
+    
+    public Money getPriceMoney(){
+        return this.price;
+    }
 
     public void setPrice(String price) {
         BigDecimal priceBD = new BigDecimal(price);
-        this.price = priceBD;
+        this.price = new Money(priceBD);
     }
 
     public int getUnitsInStock() {

@@ -42,6 +42,46 @@ public class Money {
         return balance;
     }
 
+    public int getDollars() {
+        return dollars;
+    }
+
+    public void setDollars(int dollars) {
+        this.dollars = dollars;
+    }
+
+    public int getQuarters() {
+        return quarters;
+    }
+
+    public void setQuarters(int quarters) {
+        this.quarters = quarters;
+    }
+
+    public int getDimes() {
+        return dimes;
+    }
+
+    public void setDimes(int dimes) {
+        this.dimes = dimes;
+    }
+
+    public int getNickels() {
+        return nickels;
+    }
+
+    public void setNickels(int nickels) {
+        this.nickels = nickels;
+    }
+
+    public int getPennies() {
+        return pennies;
+    }
+
+    public void setPennies(int pennies) {
+        this.pennies = pennies;
+    }
+    
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
@@ -53,6 +93,28 @@ public class Money {
     public Money subtract(Money itemPrice){
         return new Money(this.balance.subtract(itemPrice.getBalance()));
 //        this.balance.subtract(itemPrice.getBalance());
+    }
+    
+    public void compareToMoney(Money itemPrice){
+        BigDecimal balanceBD = this.getBalance();
+        BigDecimal itemPriceBD = itemPrice.getBalance();
+        
+//      balanceBD > itemPriceBD -> 1  
+        switch (balanceBD.compareTo(itemPriceBD)){
+            case 1:
+                System.out.println("You can afford item, continue");
+                break;
+            case 0:
+                System.out.println("You barely afford item, continue");
+                break;
+            case -1:
+                System.out.println("Insufficient funds");
+                break;
+            default:
+                System.out.println("no switch case met compareToMoney");
+                break;
+        }
+        
 
     }
     
@@ -73,26 +135,26 @@ public class Money {
 //      DOLLARS
         BigDecimal dollarsBD = currBalance.subtract(
                 currBalance.remainder(dollarValue));
-        this.dollars = dollarsBD.intValue();
+        setDollars(dollarsBD.intValue());
         currBalance = currBalance.subtract(dollarsBD);
         
-        changeInCoins[0] = this.dollars;
+        changeInCoins[0] = getDollars();
         
 //      QUARTERS
         currBalance = splitQDNP(currBalance, quarterValue, Coin.QUARTER);
-        changeInCoins[1] = this.quarters;
+        changeInCoins[1] = getQuarters();
 
 //        DIMES
         currBalance = splitQDNP(currBalance, dimeValue, Coin.DIME);
-        changeInCoins[2] = this.dimes;
+        changeInCoins[2] = getDimes();
 
 //        NICKELS
         currBalance = splitQDNP(currBalance, nickelValue, Coin.NICKEL);
-        changeInCoins[3] = this.nickels;
+        changeInCoins[3] = getNickels();
 
 //        PENNIES
         currBalance = splitQDNP(currBalance, pennyValue, Coin.PENNY);
-        changeInCoins[4] = this.pennies;
+        changeInCoins[4] = getPennies();
         
         return changeInCoins;
     }
@@ -107,19 +169,19 @@ public class Money {
             
             switch(coinType){
                 case QUARTER:
-                    this.quarters = numOfCoin.intValue();
+                    setQuarters(numOfCoin.intValue());
                     break;
 
                 case DIME:
-                    this.dimes = numOfCoin.intValue();
+                    setDimes(numOfCoin.intValue());
                     break;
                     
                 case NICKEL:
-                    this.nickels = numOfCoin.intValue();
+                    setNickels(numOfCoin.intValue());
                     break;
                     
                 case PENNY:
-                    this.pennies = numOfCoin.intValue();
+                    setPennies(numOfCoin.intValue());
                     break;
             }
             currBalance = currBalance.subtract(

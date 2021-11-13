@@ -58,13 +58,13 @@ public class VendingMachineView {
     }
     
     public void displayItemDispensed(Item itemSelected){
-        io.print(String.format("Dispensing %s... - Price: %s ",
+        io.print(String.format("Dispensing %s... Price: $%s ",
                 itemSelected.getName(), itemSelected.getPrice()));
     }
 
     public void displayChangeToBeReturned(Money change) {
         String changeString = change.getAsTwoDecimals().toString();
-        io.print(String.format("Change to be returned: %s",
+        io.print(String.format("Change to be returned: $%s",
                     changeString));
     }
 

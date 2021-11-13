@@ -40,6 +40,9 @@ public class VendingMachineController {
             BigDecimal balance = userInsertMoney();
             Money VMBalance = new Money(balance);
             String itemName = selectItem();
+//          check if you can afford item
+            validateSufficientFunds(VMBalance, itemName);
+//          check if item has units available
             dispenseItem(itemName);
             
             Item currItem = service.getItem(itemName);
@@ -78,14 +81,16 @@ public class VendingMachineController {
             Item currItem = service.getItem(itemName);
             view.displayItemDispensed(currItem);
         }
-        
-//        public void dispenseChange(String price){
-//            service.getChangeInPennies(price);
-//        }
-        
+   
         public void returnChange(Money change){
             view.displayChangeToBeReturned(change);
             int[] changeInCoins = change.splitInCoins();
             view.displayChangeInCoins(changeInCoins);
         }
+
+    private void validateSufficientFunds(Money VMBalance, String itemName) {
+        Money itemPrice = service.getItem(itemName).getPriceMoney();
+        VMBalance.compareToMoney(itemPrice);
+        
+    }
 }
