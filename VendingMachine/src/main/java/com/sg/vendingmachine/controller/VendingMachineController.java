@@ -10,6 +10,7 @@ import com.sg.vendingmachine.dao.VendingMachineDaoException;
 import com.sg.vendingmachine.dao.VendingMachineDaoFileImpl;
 import com.sg.vendingmachine.dto.Item;
 import com.sg.vendingmachine.dto.Money;
+import com.sg.vendingmachine.service.VendingMachineServiceException;
 import com.sg.vendingmachine.service.VendingMachineServiceLayer;
 import com.sg.vendingmachine.ui.UserIO;
 import com.sg.vendingmachine.ui.UserIOConsoleImpl;
@@ -39,9 +40,13 @@ public class VendingMachineController {
             printMenu();
             BigDecimal balance = userInsertMoney();
             Money VMBalance = new Money(balance);
-            String itemName = selectItem();
+            String itemName ;
+            do {
+                itemName = selectItem();
+                validateSufficientFunds(VMBalance, itemName);
+            } while(isItemInStock(itemName) == false);
+
 //          check if you can afford item
-            validateSufficientFunds(VMBalance, itemName);
 //          check if item has units available
             dispenseItem(itemName);
             
@@ -90,7 +95,30 @@ public class VendingMachineController {
 
     private void validateSufficientFunds(Money VMBalance, String itemName) {
         Money itemPrice = service.getItem(itemName).getPriceMoney();
-        VMBalance.compareToMoney(itemPrice);
         
+        try {
+            VMBalance.compareToMoney(itemPrice);
+        }catch(VendingMachineDaoException e){
+            view.displayErrorMessage("Insufficient funds to "
+                    + "purchase item. Exiting program");
+            view.displayTotalBalance(VMBalance);
+            System.exit(0);
+        }
+        
+    }
+
+    private Boolean isItemInStock(String itemName) {
+        
+        Item currItem = service.getItem(itemName);
+        
+        try{
+            service.validateItemAvailability(currItem);
+        }catch(VendingMachineServiceException e){
+            view.displayErrorMessage("No units remaining, "
+                    + "please choose another item");
+            
+            return false;
+        }
+        return true;
     }
 }

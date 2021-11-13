@@ -47,5 +47,8 @@ public interface VendingMachineServiceLayer {
 
     public Item getItem(String itemName);
 
+    public void validateItemAvailability(Item currItem) 
+            throws VendingMachineServiceException;
+
         
 }

@@ -1,7 +1,7 @@
 Water::1.50::2
-Snack Bar::2.50::2
-Chips::3.99::1
+Snack Bar::2.50::1
+Chips::3.99::0
 Muffin::4.99::0
 Juice::2.15::0
 Chocolate::3.99::0
-Coffee::2.00::2
+Coffee::2.00::1

@@ -105,5 +105,15 @@ public class VendingMachineServiceLayerImpl implements
         return dao.getItem(itemName);
     }
 
+    @Override
+    public void validateItemAvailability(Item currItem) 
+            throws VendingMachineServiceException{
+        
+        if (currItem.getUnitsInStock() <= 0){
+            throw new VendingMachineServiceException("Item not in stock, "
+                    + "please choose another one.");
+        }
+    }
+
     
 }

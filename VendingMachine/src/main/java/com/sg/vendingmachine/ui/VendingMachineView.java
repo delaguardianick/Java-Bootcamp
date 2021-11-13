@@ -48,7 +48,7 @@ public class VendingMachineView {
     }
     
     public void displayTotalBalance(Money balance){
-        io.print(String.format("You have $%s remaining",
+        io.print(String.format("Balance: $%s remaining",
                 balance.getAsTwoDecimals().toString()));
     }
     
@@ -103,4 +103,10 @@ public class VendingMachineView {
         }
         io.print(toDisplay);
     }
+    
+    public void displayErrorMessage(String errorMsg){
+        io.print("===ERROR===");
+        io.print(errorMsg);       
+    }
+    
 }

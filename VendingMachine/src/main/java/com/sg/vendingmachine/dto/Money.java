@@ -5,6 +5,7 @@
  */
 package com.sg.vendingmachine.dto;
 
+import com.sg.vendingmachine.dao.VendingMachineDaoException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import com.sg.vendingmachine.dto.Coin;
@@ -95,23 +96,17 @@ public class Money {
 //        this.balance.subtract(itemPrice.getBalance());
     }
     
-    public void compareToMoney(Money itemPrice){
+    public void compareToMoney(Money itemPrice) 
+            throws VendingMachineDaoException{
         BigDecimal balanceBD = this.getBalance();
         BigDecimal itemPriceBD = itemPrice.getBalance();
         
 //      balanceBD > itemPriceBD -> 1  
         switch (balanceBD.compareTo(itemPriceBD)){
-            case 1:
-                System.out.println("You can afford item, continue");
-                break;
-            case 0:
-                System.out.println("You barely afford item, continue");
-                break;
             case -1:
-                System.out.println("Insufficient funds");
-                break;
+//                System.out.println("Insufficient funds");
+                throw new VendingMachineDaoException("Insufficient funds.");
             default:
-                System.out.println("no switch case met compareToMoney");
                 break;
         }
         
