@@ -25,16 +25,16 @@ public class VendingMachineView {
     public void printMenu(List<Item> items){
         int count = 1;
         for (Item item : items){
-//            if (item.getUnitsInStock() == 0){
-//                count++;
-//                continue;
-//            }
             io.print(String.format("%d: %s - $%s - %d units left.", 
                     count, item.getName(), item.getPrice(), 
                     item.getUnitsInStock()));
             
             count++;
         }
+    }
+    
+    public void displayMenuBanner(){
+        io.print("=== Vending Machine ===");
     }
     
     public BigDecimal insertMoney(){
@@ -48,7 +48,7 @@ public class VendingMachineView {
     }
     
     public void displayTotalBalance(Money balance){
-        io.print(String.format("Balance: $%s remaining",
+        io.print(String.format("Balance: $%s available",
                 balance.getAsTwoDecimals().toString()));
     }
     
@@ -99,7 +99,13 @@ public class VendingMachineView {
                     temp = String.format("%d pennies", numOfCoins);
                     break;
             }
-            toDisplay += temp + ", ";
+            if (i != changeInCoins.length - 1){
+                toDisplay += temp + ", ";
+                continue;
+            }
+            
+            toDisplay += temp + ".";
+            
         }
         io.print(toDisplay);
     }

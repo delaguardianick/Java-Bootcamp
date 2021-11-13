@@ -17,8 +17,6 @@ import java.util.List;
  */
 public interface VendingMachineDao {
     
-    void purchaseItem();
-    
     void loadVendingMachine() throws VendingMachineDaoException;
     
     void saveVendingMachine() throws VendingMachineDaoException;

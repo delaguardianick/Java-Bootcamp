@@ -36,30 +36,35 @@ public class VendingMachineController {
             this.view = view;
     }
         
+//      MAIN DRIVER FUNCTION
         public void run() throws VendingMachineDaoException{
             printMenu();
-            BigDecimal balance = userInsertMoney();
-            Money VMBalance = new Money(balance);
+            Money VMBalance = new Money(userInsertMoney());
+            
+            /**
+             * Ask for user to choose an item from menu
+             * and validate if sufficient money in machine -> else quit program
+             * if item not in stock, repeat
+            */
             String itemName ;
             do {
                 itemName = selectItem();
                 validateSufficientFunds(VMBalance, itemName);
             } while(isItemInStock(itemName) == false);
 
-//          check if you can afford item
-//          check if item has units available
             dispenseItem(itemName);
-            
-            Item currItem = service.getItem(itemName);
-            Money itemPrice = new Money(currItem.getPrice());
+
+            /*
+              Subtract itemPrice to balance and return change in coins
+            */
+            Money itemPrice = new Money(service.getItem(itemName).getPrice());
             Money totalChange = VMBalance.subtract(itemPrice);
-            
-//            Money totalChange = service.getChangeInPennies(itemPrice);
             returnChange(totalChange);
         }
         
         public void printMenu() throws VendingMachineDaoException {
             List<Item> items = service.getAllItems();
+            view.displayMenuBanner();
             view.printMenu(items);
         }
         
@@ -82,7 +87,6 @@ public class VendingMachineController {
                 throws VendingMachineDaoException{
             
             service.dispenseItem(itemName);
-            
             Item currItem = service.getItem(itemName);
             view.displayItemDispensed(currItem);
         }
@@ -93,32 +97,33 @@ public class VendingMachineController {
             view.displayChangeInCoins(changeInCoins);
         }
 
-    private void validateSufficientFunds(Money VMBalance, String itemName) {
-        Money itemPrice = service.getItem(itemName).getPriceMoney();
-        
-        try {
-            VMBalance.compareToMoney(itemPrice);
-        }catch(VendingMachineDaoException e){
-            view.displayErrorMessage("Insufficient funds to "
-                    + "purchase item. Exiting program");
-            view.displayTotalBalance(VMBalance);
-            System.exit(0);
-        }
-        
-    }
+//          check if you can afford item
+        private void validateSufficientFunds(Money VMBalance, String itemName) {
+            Money itemPrice = service.getItem(itemName).getPriceMoney();
 
-    private Boolean isItemInStock(String itemName) {
-        
-        Item currItem = service.getItem(itemName);
-        
-        try{
-            service.validateItemAvailability(currItem);
-        }catch(VendingMachineServiceException e){
-            view.displayErrorMessage("No units remaining, "
-                    + "please choose another item");
-            
-            return false;
+            try {
+                VMBalance.compareToMoney(itemPrice);
+            }catch(VendingMachineDaoException e){
+                view.displayErrorMessage("Insufficient funds to "
+                        + "purchase item. Exiting program");
+                view.displayTotalBalance(VMBalance);
+                System.exit(0);
+            }
+
         }
-        return true;
-    }
+
+        private Boolean isItemInStock(String itemName) {
+
+            Item currItem = service.getItem(itemName);
+
+            try{
+                service.validateItemAvailability(currItem);
+            }catch(VendingMachineServiceException e){
+                view.displayErrorMessage("No units remaining, "
+                        + "please choose another item");
+
+                return false;
+            }
+            return true;
+        }
 }

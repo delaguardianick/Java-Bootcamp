@@ -29,9 +29,19 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
     private Map<String, Item> vendingMachine = new HashMap<>();
     private Money totalBalance = new Money("0");
     
-    private static final String VM_FILE = "vendingMachine.txt";
+    private final String VM_FILE;
     public static final String DELIMITER = "::";
 
+    
+    public VendingMachineDaoFileImpl(){
+//        vendingMachine.txt
+        VM_FILE = "vendingMachine.txt";
+    }
+    
+    public VendingMachineDaoFileImpl(String VMTextFile){
+//        vendingMachine.txt
+        VM_FILE = VMTextFile;
+    }
     
     @Override
     public void loadVendingMachine() throws VendingMachineDaoException{
@@ -76,16 +86,10 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
     }
     
     @Override
-    public void purchaseItem() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public String marshallItem(Item itemAsObject) {
         String name = itemAsObject.getName();
         String price = itemAsObject.getPrice();
         int units = itemAsObject.getUnitsInStock();
-        
         
         String itemAsText = String.format("%s::%s::%d",
                 name, price, units);

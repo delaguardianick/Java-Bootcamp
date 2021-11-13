@@ -22,6 +22,7 @@ import com.sg.vendingmachine.ui.VendingMachineView;
 public class App {
     public static void main(String[] args) throws VendingMachineDaoException {
         
+//        String VMTextFile = "vendingMachine.txt";
         VendingMachineDao myDao = new VendingMachineDaoFileImpl();
         VendingMachineServiceLayer myService = new 
             VendingMachineServiceLayerImpl(myDao);
