@@ -94,5 +94,16 @@ public class VendingMachineServiceLayerImpl implements
         
     }
 
+    @Override
+    public void dispenseItem(String itemName)
+            throws VendingMachineDaoException{
+        dao.dispenseItem(itemName);
+    }
+
+    @Override
+    public Item getItem(String itemName) {
+        return dao.getItem(itemName);
+    }
+
     
 }

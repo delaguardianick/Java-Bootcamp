@@ -65,7 +65,14 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
              throw new VendingMachineDaoException("Couldn't save to file");
          }
          
-         
+        List<Item> allItems = getAllItems();
+        for (Item itemAsObject : allItems){
+            String itemAsText = marshallItem(itemAsObject);
+            
+            out.println(itemAsText);
+            out.flush();
+        }
+        out.close();
     }
     
     @Override
@@ -123,6 +130,23 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
 
     public Money getTotalBalance() {
         return this.totalBalance;
+    }
+
+    @Override
+    public void dispenseItem(String itemName) 
+            throws VendingMachineDaoException{
+        
+        loadVendingMachine();
+        Item dispensedItem = getItem(itemName);
+        dispensedItem.setUnitsInStock(
+                dispensedItem.getUnitsInStock() - 1);
+        saveVendingMachine();
+        
+//        Could add NoItemInventoryException here
+    }
+    
+    public Item getItem(String itemName){
+        return vendingMachine.get(itemName);
     }
 
    

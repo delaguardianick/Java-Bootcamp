@@ -39,9 +39,10 @@ public class VendingMachineController {
             printMenu();
             BigDecimal balance = userInsertMoney();
             Money VMBalance = new Money(balance);
-            Item currItem = selectItem();
-            dispenseItem(currItem);
+            String itemName = selectItem();
+            dispenseItem(itemName);
             
+            Item currItem = service.getItem(itemName);
             Money itemPrice = new Money(currItem.getPrice());
             Money totalChange = VMBalance.subtract(itemPrice);
             
@@ -61,16 +62,20 @@ public class VendingMachineController {
             return balance;
         }
         
-        public Item selectItem() throws VendingMachineDaoException{
+        public String selectItem() throws VendingMachineDaoException{
             int itemCount = service.getNumberOfItemsAvailable();
             int itemSelected = view.userSelectItem(itemCount) - 1;
             List<Item> items = service.getAllItems();
-            return items.get(itemSelected);
+            String itemName = items.get(itemSelected).getName();
+            return itemName;
         }
         
-        public void dispenseItem(Item currItem) 
+        public void dispenseItem(String itemName) 
                 throws VendingMachineDaoException{
             
+            service.dispenseItem(itemName);
+            
+            Item currItem = service.getItem(itemName);
             view.displayItemDispensed(currItem);
         }
         

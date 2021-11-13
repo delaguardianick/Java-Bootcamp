@@ -58,9 +58,8 @@ public class VendingMachineView {
     }
     
     public void displayItemDispensed(Item itemSelected){
-        io.print(String.format("Dispensing %s...", itemSelected.getName()));
-        io.print(String.format("Price: %s", itemSelected.getPrice()));
-        
+        io.print(String.format("Dispensing %s... - Price: %s ",
+                itemSelected.getName(), itemSelected.getPrice()));
     }
 
     public void displayChangeToBeReturned(Money change) {

@@ -36,4 +36,9 @@ public interface VendingMachineDao {
     int getNumberOfItemsAvailable();
     
     Money getTotalBalance();
+
+    public void dispenseItem(String itemName) 
+            throws VendingMachineDaoException;
+    
+    Item getItem(String itemName);
 }

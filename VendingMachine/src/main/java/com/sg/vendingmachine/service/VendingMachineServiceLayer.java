@@ -42,5 +42,10 @@ public interface VendingMachineServiceLayer {
 
     public void changeInCoins(Money totalChange);
 
+    public void dispenseItem(String itemName)
+            throws VendingMachineDaoException;
+
+    public Item getItem(String itemName);
+
         
 }
