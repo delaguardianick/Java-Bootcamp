@@ -5,6 +5,7 @@
  */
 package com.sg.vendingmachine.service;
 
+import com.sg.vendingmachine.dao.VendingMachineAuditDao;
 import com.sg.vendingmachine.dao.VendingMachineDao;
 import com.sg.vendingmachine.dao.VendingMachineDaoException;
 import com.sg.vendingmachine.dto.Item;
@@ -19,10 +20,13 @@ import java.util.List;
 public class VendingMachineServiceLayerImpl implements 
         VendingMachineServiceLayer {
     
-    VendingMachineDao dao;
+    private VendingMachineDao dao;
+    private VendingMachineAuditDao auditDao;
     
-    public VendingMachineServiceLayerImpl(VendingMachineDao dao){
+    public VendingMachineServiceLayerImpl(VendingMachineDao dao,
+            VendingMachineAuditDao auditDao){
         this.dao = dao;
+        this.auditDao = auditDao;
     }
 
     @Override
@@ -32,6 +36,8 @@ public class VendingMachineServiceLayerImpl implements
         }catch(Exception e){
             throw e;
         }
+        
+        auditDao.writeAuditEntry("Loaded Vending Machine from file");
     }
 
     @Override
@@ -53,6 +59,11 @@ public class VendingMachineServiceLayerImpl implements
     public void dispenseItem(String itemName)
             throws VendingMachineDaoException{
         dao.dispenseItem(itemName);
+        
+        Item currItem = dao.getItem(itemName);
+        auditDao.writeAuditEntry(String.format(
+                "Dispensed item %s, $%s, %d units left",
+                itemName, currItem.getPrice(), currItem.getUnitsInStock()));
     }
 
     @Override

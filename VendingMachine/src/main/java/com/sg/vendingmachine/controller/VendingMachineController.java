@@ -30,7 +30,6 @@ public class VendingMachineController {
         private VendingMachineDao dao = new VendingMachineDaoFileImpl();
         private UserIO io = new UserIOConsoleImpl();
 
-
         public VendingMachineController(VendingMachineServiceLayer service, 
                 VendingMachineView view){
             this.service = service;

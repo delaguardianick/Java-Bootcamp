@@ -6,6 +6,8 @@
 package com.sg.vendingmachine;
 
 import com.sg.vendingmachine.controller.VendingMachineController;
+import com.sg.vendingmachine.dao.VendingMachineAuditDao;
+import com.sg.vendingmachine.dao.VendingMachineAuditDaoFileImpl;
 import com.sg.vendingmachine.dao.VendingMachineDao;
 import com.sg.vendingmachine.dao.VendingMachineDaoException;
 import com.sg.vendingmachine.dao.VendingMachineDaoFileImpl;
@@ -24,8 +26,13 @@ public class App {
         
 //        String VMTextFile = "vendingMachine.txt";
         VendingMachineDao myDao = new VendingMachineDaoFileImpl();
+        
+        VendingMachineAuditDao myAuditDao = 
+                new VendingMachineAuditDaoFileImpl();
+        
         VendingMachineServiceLayer myService = new 
-            VendingMachineServiceLayerImpl(myDao);
+            VendingMachineServiceLayerImpl(myDao, myAuditDao );
+        
         UserIO myIO = new UserIOConsoleImpl();
         VendingMachineView myView = new VendingMachineView(myIO);
 
