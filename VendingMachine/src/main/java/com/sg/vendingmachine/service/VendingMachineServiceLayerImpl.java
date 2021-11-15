@@ -40,6 +40,9 @@ public class VendingMachineServiceLayerImpl implements
         auditDao.writeAuditEntry("Loaded Vending Machine from file");
     }
 
+    /*
+    @returns all items in list form
+    */
     @Override
     public List<Item> getAllItems() throws VendingMachineDaoException {
         return dao.getAllItems();
@@ -55,6 +58,9 @@ public class VendingMachineServiceLayerImpl implements
         return dao.getNumberOfItemsAvailable();
     }
 
+    /*
+    Dispenses the item and writes to audit file
+    */
     @Override
     public void dispenseItem(String itemName)
             throws VendingMachineDaoException{
@@ -71,6 +77,10 @@ public class VendingMachineServiceLayerImpl implements
         return dao.getItem(itemName);
     }
 
+    
+    /*
+    Checks if item to be dispensed is in stock, if not throw exception
+    */
     @Override
     public void validateItemAvailability(Item currItem) 
             throws NoItemInventoryException{

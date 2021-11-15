@@ -32,17 +32,20 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
     private final String VM_FILE;
     public static final String DELIMITER = "::";
 
-    
+    /*
+    Constructors that inituate the vendingMachine.txt by default
+    But if testing needed, can input different file name
+    */
     public VendingMachineDaoFileImpl(){
-//        vendingMachine.txt
         VM_FILE = "vendingMachine.txt";
     }
     
     public VendingMachineDaoFileImpl(String VMTextFile){
-//        vendingMachine.txt
         VM_FILE = VMTextFile;
     }
-    
+    /*
+    Reads from file, unmarshalls the items and puts them in HashMap(Name, item)
+    */
     @Override
     public void loadVendingMachine() throws VendingMachineDaoException{
         Scanner sc;
@@ -64,6 +67,9 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
         sc.close();
     }
     
+    /*
+    Gets HashMap, marshalls items and writes them to file
+    */
      @Override
     public void saveVendingMachine() throws VendingMachineDaoException{
         PrintWriter out;
@@ -84,7 +90,10 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
         }
         out.close();
     }
-    
+    /*
+    Marshalls an item into "itemName::Price::UnitsInStock" form
+    @returns the marshalled item as a string
+    */
     @Override
     public String marshallItem(Item itemAsObject) {
         String name = itemAsObject.getName();
@@ -97,6 +106,10 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
         return itemAsText;
     }
 
+    /*
+    Unmarshalls an item from String form to an Item object
+    @returns unmarshalled Item object
+    */
     @Override
     public Item unmarshallItem(String itemAsText) {
         String[] itemTokens = itemAsText.split(DELIMITER);
@@ -109,7 +122,9 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
         return itemFromFile;
 
     }
-
+    /*
+    @returns most updated list of items
+    */
     @Override
     public List<Item> getAllItems() throws VendingMachineDaoException {
         loadVendingMachine();
@@ -131,7 +146,11 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
     public Money getTotalBalance() {
         return this.totalBalance;
     }
-
+    
+    /*
+    Dispenses an item, subtracts 1 unit from stock
+    Writes to file
+    */
     @Override
     public void dispenseItem(String itemName) 
             throws VendingMachineDaoException{

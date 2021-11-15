@@ -62,6 +62,10 @@ public class VendingMachineController {
             returnChange(totalChange);
         }
         
+        /*
+        Requests list of all items and prints the menu
+        Displays error if list not available
+        */
         public void printMenu()  {
             List<Item> items = null;
             try {
@@ -69,11 +73,17 @@ public class VendingMachineController {
             } catch (VendingMachineDaoException ex) {
                 view.displayErrorMessage("Couldn't load menu");
             }
+            
             view.displayMenuBanner();
             view.printMenu(items);
 //            view.printUnvailableItems(items);
         }
         
+        /*
+        Prompts user to insert the money in the vending machine
+        Displays the balance
+        @returns the balance in BigDecimal
+        */
         public BigDecimal userInsertMoney(){
             BigDecimal balance = view.insertMoney();
             Money totalBalance = service.createBalance(balance);
@@ -81,6 +91,11 @@ public class VendingMachineController {
             return balance;
         }
         
+        /*
+        Prompts user to select an item from the menu
+        The menu number reflects the index of the item in the List Items - 1
+        @returns the item if available, displays error if not
+        */
         public String selectItem() {
             try {
                 int itemCount = service.getNumberOfItemsAvailable();
@@ -95,8 +110,13 @@ public class VendingMachineController {
             return null;
         }
         
+        /*
+        Searches the item chosen and displays it is being dispensed
+        Subtracts the unit count in the HashMap and in the file
+        */
         public void dispenseItem(String itemName) {
             
+            view.displayEmptyLine();
             try {
                 service.dispenseItem(itemName);
             } catch (VendingMachineDaoException ex) {
@@ -106,19 +126,25 @@ public class VendingMachineController {
             view.displayItemDispensed(currItem);
         }
    
+        /*
+            @returns the change to be returned in dollars, quarters, dimes, 
+             nickels and pennies
+        */
         public void returnChange(Money change){
             view.displayChangeToBeReturned(change);
             int[] changeInCoins = change.splitInCoins();
             view.displayChangeInCoins(changeInCoins);
         }
 
-//          check if you can afford item
+        /*
+            Check if you can afford the item, if not display error and quit.
+        */
         private void validateSufficientFunds(Money VMBalance, String itemName){
         
             Money itemPrice = service.getItem(itemName).getPriceMoney();
 
             try {
-                VMBalance.compareToMoney(itemPrice);
+                VMBalance.canAfford(itemPrice);
             }catch(InsufficientFundsException e){
                 view.displayErrorMessage("Insufficient funds to "
                         + "purchase item. Exiting program");
@@ -128,6 +154,10 @@ public class VendingMachineController {
 
         }
 
+        /*
+        Validates if item has units left in stock
+        if not, display error message and return false;
+        */
         private Boolean isItemInStock(String itemName) {
 
             Item currItem = service.getItem(itemName);

@@ -12,7 +12,6 @@ import java.util.List;
 
 /**
  *
- * @author Gordak
  */
 public class VendingMachineView {
     
@@ -22,17 +21,27 @@ public class VendingMachineView {
         this.io = io;
     }
     
+    
+    /*
+    
+    Prints all items in the list with price and units in stock
+    Indexes correspond to position of item in list + 1
+    ex. 6: Chocolate - $3.99 - 4 units left.
+    */
     public void printMenu(List<Item> items){
         int count = 1;
         for (Item item : items){
             io.print(String.format("%d: %s - $%s - %d units left.", 
                     count, item.getName(), item.getPrice(), 
                     item.getUnitsInStock()));
-            
             count++;
         }
     }
     
+    /*
+    Uses lambda function to print unavailable items
+    Currently unused but works
+    */
     public void printUnvailableItems(List<Item> items){
         io.print("Unavailable items: ");
         items.stream().filter((item) -> item.getUnitsInStock() == 0).
@@ -43,13 +52,14 @@ public class VendingMachineView {
         io.print("=== Vending Machine ===");
     }
     
+    /*
+    Prompts user to enter money into machine
+    */
     public BigDecimal insertMoney(){
-        
         Double moneyEntered = 0.00;
         while (moneyEntered <= 0 ){
             moneyEntered = io.readDouble("Please enter money: ");
         }
-        
         return new BigDecimal(moneyEntered);
     }
     
@@ -74,6 +84,10 @@ public class VendingMachineView {
                     changeString));
     }
 
+    /*
+    Gets list of coin split from the Money.splitInCoins() function
+    Displays each coin quantity accordingly
+    */
     public void displayChangeInCoins(int[] changeInCoins) {
         
         String toDisplay = "";
@@ -121,4 +135,7 @@ public class VendingMachineView {
         io.print(errorMsg);       
     }
     
+    public void displayEmptyLine(){
+        io.print("");
+    }
 }

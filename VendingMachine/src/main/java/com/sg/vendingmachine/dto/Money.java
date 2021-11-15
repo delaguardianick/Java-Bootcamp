@@ -40,6 +40,9 @@ public class Money {
         this.balance = balance;
     }
 
+    /*
+    Getters and setters
+    */
     public BigDecimal getBalance() {
         return balance;
     }
@@ -92,12 +95,20 @@ public class Money {
         this.balance = this.balance.add(modifier);
     }
     
+    /*
+    Subtracts two Money objects using BigDecimal
+    @returns change as Money
+    */
     public Money subtract(Money itemPrice){
         return new Money(this.balance.subtract(itemPrice.getBalance()));
-//        this.balance.subtract(itemPrice.getBalance());
     }
     
-    public void compareToMoney(Money itemPrice) 
+    /*
+    Compares two money objects using BigDecimal compareTo
+    If balance can't afford itemPrice, throw InsufficientFundException
+    else, do nothing.
+    */
+    public void canAfford(Money itemPrice) 
             throws InsufficientFundsException{
         BigDecimal balanceBD = this.getBalance();
         BigDecimal itemPriceBD = itemPrice.getBalance();
@@ -111,19 +122,27 @@ public class Money {
                 break;
         }
         
-
+    /*
+    @returns the BigDecimal balance as a string    
+    */
     }
-    
     public String toString(){
         return this.balance.toString();
     }
     
+    /*
+    @returns balance formatted to scale 2 (ex. $8.64) as Money object
+    */
     public Money getAsTwoDecimals(){
         BigDecimal changeBD = this.getBalance();
         changeBD = changeBD.setScale(2, RoundingMode.HALF_UP);
         return new Money(changeBD);
     }
     
+    /*
+    Splits change into dollars, quarters, dimes, nickels and pennies
+    @returns list of coin split
+    */
     public int[] splitInCoins(){
         BigDecimal currBalance = this.balance;
         int[] changeInCoins = new int[5]; 
@@ -155,6 +174,11 @@ public class Money {
         return changeInCoins;
     }
     
+    /*
+    helper function to splitInCoins()
+    Divides the change in the according coins.
+    @returns BigDecimal of remaining balance
+    */
     public BigDecimal splitQDNP(BigDecimal currBalance, BigDecimal coinVal, 
             Coin coinType ){
         
