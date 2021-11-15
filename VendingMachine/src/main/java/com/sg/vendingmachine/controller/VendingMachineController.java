@@ -71,6 +71,7 @@ public class VendingMachineController {
             }
             view.displayMenuBanner();
             view.printMenu(items);
+//            view.printUnvailableItems(items);
         }
         
         public BigDecimal userInsertMoney(){

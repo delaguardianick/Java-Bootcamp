@@ -33,6 +33,12 @@ public class VendingMachineView {
         }
     }
     
+    public void printUnvailableItems(List<Item> items){
+        io.print("Unavailable items: ");
+        items.stream().filter((item) -> item.getUnitsInStock() == 0).
+                map((item) -> item.getName()).forEach((item) -> io.print(item));
+    }
+    
     public void displayMenuBanner(){
         io.print("=== Vending Machine ===");
     }
