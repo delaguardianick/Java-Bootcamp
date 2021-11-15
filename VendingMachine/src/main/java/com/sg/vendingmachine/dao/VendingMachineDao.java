@@ -27,8 +27,6 @@ public interface VendingMachineDao {
     
    List<Item> getAllItems() throws VendingMachineDaoException;
    
-   void modifyBalance(BigDecimal modifier); 
-
     Money createBalance(BigDecimal balance);
     
     int getNumberOfItemsAvailable();

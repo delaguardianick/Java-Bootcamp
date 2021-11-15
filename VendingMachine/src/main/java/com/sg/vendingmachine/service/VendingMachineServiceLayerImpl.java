@@ -26,13 +26,7 @@ public class VendingMachineServiceLayerImpl implements
     }
 
     @Override
-    public void purchaseItem() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void loadVendingMachine() throws VendingMachineDaoException {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         try{
             dao.loadVendingMachine();
         }catch(Exception e){
@@ -41,28 +35,8 @@ public class VendingMachineServiceLayerImpl implements
     }
 
     @Override
-    public void saveVendingMachine() throws VendingMachineDaoException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String marshallItem(Item itemAsObject) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Item unmarshallItem(String itemAsText) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public List<Item> getAllItems() throws VendingMachineDaoException {
         return dao.getAllItems();
-    }
-
-    @Override
-    public void modifyBalance(BigDecimal modifier) {
-        dao.modifyBalance(modifier);
     }
 
     @Override
@@ -73,25 +47,6 @@ public class VendingMachineServiceLayerImpl implements
     @Override
     public int getNumberOfItemsAvailable() {
         return dao.getNumberOfItemsAvailable();
-    }
-
-//    @Override
-//    public void getItem(int itemNumber) {
-//        return dao.getItem(int itemNumber);
-//    }
-
-    @Override
-    public Money getChangeInPennies(Money itemPrice) {
-        Money totalBalance = dao.getTotalBalance();
-//        Money itemPrice = new Money(price);
-        
-//        return itemPrice;
-        return totalBalance.subtract(itemPrice);
-    }
-    
-    @Override
-    public void changeInCoins(Money totalChange){
-        
     }
 
     @Override
@@ -107,13 +62,16 @@ public class VendingMachineServiceLayerImpl implements
 
     @Override
     public void validateItemAvailability(Item currItem) 
-            throws VendingMachineServiceException{
+            throws NoItemInventoryException{
         
         if (currItem.getUnitsInStock() <= 0){
-            throw new VendingMachineServiceException("Item not in stock, "
+            throw new NoItemInventoryException("Item not in stock, "
                     + "please choose another one.");
         }
     }
-
     
+    @Override
+    public Money getTotalBalance() {
+        return dao.getTotalBalance();
+    }
 }

@@ -17,30 +17,15 @@ import java.util.List;
  */
 public interface VendingMachineServiceLayer {
     
-    void purchaseItem();
-    
     void loadVendingMachine() throws VendingMachineDaoException;
-    
-    void saveVendingMachine() throws VendingMachineDaoException;
-    
-    String marshallItem(Item itemAsObject);
-    
-    Item unmarshallItem(String itemAsText);
     
     List<Item> getAllItems() throws VendingMachineDaoException;
     
-    void modifyBalance(BigDecimal modifier);
-
     public Money createBalance(BigDecimal balance);
     
     int getNumberOfItemsAvailable();
 
 //    public void getItem(int itemNumber);
-
-    public Money getChangeInPennies(Money itemPrice);
-
-
-    public void changeInCoins(Money totalChange);
 
     public void dispenseItem(String itemName)
             throws VendingMachineDaoException;
@@ -48,7 +33,7 @@ public interface VendingMachineServiceLayer {
     public Item getItem(String itemName);
 
     public void validateItemAvailability(Item currItem) 
-            throws VendingMachineServiceException;
+            throws NoItemInventoryException;
 
-        
+   Money getTotalBalance();
 }

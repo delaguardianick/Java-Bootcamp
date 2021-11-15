@@ -29,11 +29,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class VendingMachineDaoFileImplTest {
    
     VendingMachineDao testDao;
-    Map<String, Item> testVendingMachine = new HashMap<>();
-
     
     public VendingMachineDaoFileImplTest() {
-
     }
 
     @BeforeAll
@@ -93,14 +90,8 @@ public class VendingMachineDaoFileImplTest {
         vmItems.add(coffee);
         vmItems.add(chocolate);
         
-//        for (String item : vmItems){
-//            Item currItem = testDao.unmarshallItem(item);
-//            testVendingMachine.put(currItem.getName(), currItem);
-//        }
         return vmItems;
     }
-    
-    
     
     @AfterEach
     public void tearDown() {
@@ -120,6 +111,23 @@ public class VendingMachineDaoFileImplTest {
         assertEquals(testItemAsString, "Water::1.50::2");
     }
    
+    @Test 
+    public void testDispenseItem() throws VendingMachineDaoException{
+        setUp();
+        int prevStock = testDao.getItem("Chocolate").getUnitsInStock();
+        testDao.dispenseItem("Chocolate");
+        int currStock = testDao.getItem("Chocolate").getUnitsInStock();
+        
+        assertEquals(prevStock - 1, currStock);
+    }
+    
+    @Test 
+    public void testGetItem(){
+        setUp();
+        String itemPrice = testDao.getItem("Muffin").getPrice();
+        assertEquals(itemPrice, "4.99");
+    }
+    
     
 //    Have to implement Item comparison..
 //    @Test
@@ -131,11 +139,9 @@ public class VendingMachineDaoFileImplTest {
 //
 //        assertEquals(testItemAsObject, whatItShouldBe);
 //    }
-
     
-    
-    private Writer FileWriter(String testVendingMachinetxt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+//    private Writer FileWriter(String testVendingMachinetxt) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
     
 }

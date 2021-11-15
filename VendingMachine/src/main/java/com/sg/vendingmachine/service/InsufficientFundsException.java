@@ -9,13 +9,13 @@ package com.sg.vendingmachine.service;
  *
  * @author Gordak
  */
-public class VendingMachineServiceException extends Exception{
+public class InsufficientFundsException extends Exception{
     
-    public VendingMachineServiceException(String message){
+    public InsufficientFundsException(String message){
         super(message);
     }
     
-    public VendingMachineServiceException(String message, Throwable cause){
+    public InsufficientFundsException(String message, Throwable cause){
         super(message, cause);
     }
 }

@@ -10,7 +10,8 @@ import com.sg.vendingmachine.dao.VendingMachineDaoException;
 import com.sg.vendingmachine.dao.VendingMachineDaoFileImpl;
 import com.sg.vendingmachine.dto.Item;
 import com.sg.vendingmachine.dto.Money;
-import com.sg.vendingmachine.service.VendingMachineServiceException;
+import com.sg.vendingmachine.service.InsufficientFundsException;
+import com.sg.vendingmachine.service.NoItemInventoryException;
 import com.sg.vendingmachine.service.VendingMachineServiceLayer;
 import com.sg.vendingmachine.ui.UserIO;
 import com.sg.vendingmachine.ui.UserIOConsoleImpl;
@@ -37,7 +38,7 @@ public class VendingMachineController {
     }
         
 //      MAIN DRIVER FUNCTION
-        public void run() throws VendingMachineDaoException{
+        public void run() {
             printMenu();
             Money VMBalance = new Money(userInsertMoney());
             
@@ -62,8 +63,13 @@ public class VendingMachineController {
             returnChange(totalChange);
         }
         
-        public void printMenu() throws VendingMachineDaoException {
-            List<Item> items = service.getAllItems();
+        public void printMenu()  {
+            List<Item> items = null;
+            try {
+                items = service.getAllItems();
+            } catch (VendingMachineDaoException ex) {
+                view.displayErrorMessage("Couldn't load menu");
+            }
             view.displayMenuBanner();
             view.printMenu(items);
         }
@@ -75,18 +81,27 @@ public class VendingMachineController {
             return balance;
         }
         
-        public String selectItem() throws VendingMachineDaoException{
-            int itemCount = service.getNumberOfItemsAvailable();
-            int itemSelected = view.userSelectItem(itemCount) - 1;
-            List<Item> items = service.getAllItems();
-            String itemName = items.get(itemSelected).getName();
-            return itemName;
+        public String selectItem() {
+            try {
+                int itemCount = service.getNumberOfItemsAvailable();
+                int itemSelected = view.userSelectItem(itemCount) - 1;
+                List<Item> items = service.getAllItems();
+                String itemName = items.get(itemSelected).getName();
+                return itemName;
+            } catch (VendingMachineDaoException ex) {
+                view.displayErrorMessage("Couldn't select item");
+            }
+            
+            return null;
         }
         
-        public void dispenseItem(String itemName) 
-                throws VendingMachineDaoException{
+        public void dispenseItem(String itemName) {
             
-            service.dispenseItem(itemName);
+            try {
+                service.dispenseItem(itemName);
+            } catch (VendingMachineDaoException ex) {
+                view.displayErrorMessage("Couldn't dispense item");
+            }
             Item currItem = service.getItem(itemName);
             view.displayItemDispensed(currItem);
         }
@@ -98,12 +113,13 @@ public class VendingMachineController {
         }
 
 //          check if you can afford item
-        private void validateSufficientFunds(Money VMBalance, String itemName) {
+        private void validateSufficientFunds(Money VMBalance, String itemName){
+        
             Money itemPrice = service.getItem(itemName).getPriceMoney();
 
             try {
                 VMBalance.compareToMoney(itemPrice);
-            }catch(VendingMachineDaoException e){
+            }catch(InsufficientFundsException e){
                 view.displayErrorMessage("Insufficient funds to "
                         + "purchase item. Exiting program");
                 view.displayTotalBalance(VMBalance);
@@ -118,7 +134,7 @@ public class VendingMachineController {
 
             try{
                 service.validateItemAvailability(currItem);
-            }catch(VendingMachineServiceException e){
+            }catch(NoItemInventoryException e){
                 view.displayErrorMessage("No units remaining, "
                         + "please choose another item");
 
