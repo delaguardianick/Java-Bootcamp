@@ -22,20 +22,31 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-/**
- *
- * @author Gordak
- */
 public class VendingMachineServiceLayerImplTest {
-        
-    VendingMachineDao testDao;
+      
+//    VendingMachineDao testDao;
     VendingMachineServiceLayer testService;
-    VendingMachineAuditDao testAudit;
+//    VendingMachineAuditDao testAudit;
             
-
-    
     public VendingMachineServiceLayerImplTest() {
+//        String testFile = "testVendingMachine.txt";
+//        testDao = new VendingMachineDaoFileImpl(testFile);
+//        testAudit = new VendingMachineAuditDaoFileImpl();
+//        testService = new VendingMachineServiceLayerImpl(testDao, testAudit);
+
+
+        /*
+            Dependency Injection using SpringDI
+            Using the XML way here, only for the ServiceLayerTest
+            applicationContext.xml can be found in src/main/resources
+        */
+        ApplicationContext ctx = 
+            new ClassPathXmlApplicationContext("applicationContext.xml");
+            testService = 
+        ctx.getBean("service", VendingMachineServiceLayer.class);
     }
     
     @BeforeAll
@@ -49,10 +60,7 @@ public class VendingMachineServiceLayerImplTest {
     @BeforeEach
     public void setUp() {
         
-        String testFile = "testVendingMachine.txt";
-        testDao = new VendingMachineDaoFileImpl(testFile);
-        testAudit = new VendingMachineAuditDaoFileImpl();
-        testService = new VendingMachineServiceLayerImpl(testDao, testAudit);
+        
     }
     
     @AfterEach
@@ -70,7 +78,6 @@ public class VendingMachineServiceLayerImplTest {
         String returnedBalanceMoneyToString = returnedBalanceMoney.
                 getBalance().toString();
         
-        System.out.println("Here");
         assertEquals(balanceMoneyToString, 
                 returnedBalanceMoneyToString);
     }

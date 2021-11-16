@@ -18,11 +18,10 @@ import com.sg.vendingmachine.ui.UserIOConsoleImpl;
 import com.sg.vendingmachine.ui.VendingMachineView;
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-/**
- *
- * @author Gordak
- */
+@Component
 public class VendingMachineController {
     
         private VendingMachineView view;
@@ -30,6 +29,7 @@ public class VendingMachineController {
         private VendingMachineDao dao = new VendingMachineDaoFileImpl();
         private UserIO io = new UserIOConsoleImpl();
 
+        @Autowired
         public VendingMachineController(VendingMachineServiceLayer service, 
                 VendingMachineView view){
             this.service = service;

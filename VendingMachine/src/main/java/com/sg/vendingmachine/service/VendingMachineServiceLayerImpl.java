@@ -12,17 +12,17 @@ import com.sg.vendingmachine.dto.Item;
 import com.sg.vendingmachine.dto.Money;
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-/**
- *
- * @author Gordak
- */
+@Component
 public class VendingMachineServiceLayerImpl implements 
         VendingMachineServiceLayer {
     
     private VendingMachineDao dao;
     private VendingMachineAuditDao auditDao;
     
+    @Autowired
     public VendingMachineServiceLayerImpl(VendingMachineDao dao,
             VendingMachineAuditDao auditDao){
         this.dao = dao;

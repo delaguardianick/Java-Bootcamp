@@ -9,21 +9,21 @@ import com.sg.vendingmachine.dto.Item;
 import com.sg.vendingmachine.dto.Money;
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-/**
- *
- */
+
+@Component
 public class VendingMachineView {
     
     private UserIO io;
     
+    @Autowired
     public VendingMachineView(UserIO io){
         this.io = io;
     }
     
-    
     /*
-    
     Prints all items in the list with price and units in stock
     Indexes correspond to position of item in list + 1
     ex. 6: Chocolate - $3.99 - 4 units left.

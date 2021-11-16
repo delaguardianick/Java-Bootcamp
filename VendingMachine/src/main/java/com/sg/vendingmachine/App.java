@@ -16,6 +16,9 @@ import com.sg.vendingmachine.service.VendingMachineServiceLayerImpl;
 import com.sg.vendingmachine.ui.UserIO;
 import com.sg.vendingmachine.ui.UserIOConsoleImpl;
 import com.sg.vendingmachine.ui.VendingMachineView;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -24,22 +27,42 @@ import com.sg.vendingmachine.ui.VendingMachineView;
 public class App {
     public static void main(String[] args) {
         
+       /*
+        Using annotation SpringDI
+        Starting the scan at App.java and going down the subfolders
+        Looking for @Component classes and @Autowired constructors
+        
+        Initializing and running the controller after components are found.
+        */
+        AnnotationConfigApplicationContext appContext = 
+                new AnnotationConfigApplicationContext();
+        
+                appContext.scan("com.sg.vendingmachine");
+                appContext.refresh();
+                
+                
+        VendingMachineController controller = appContext.
+                getBean("vendingMachineController",
+                VendingMachineController.class);
+        
+            controller.run();
+        
 //        String VMTextFile = "vendingMachine.txt";
-        VendingMachineDao myDao = new VendingMachineDaoFileImpl();
-        
-        VendingMachineAuditDao myAuditDao = 
-                new VendingMachineAuditDaoFileImpl();
-        
-        VendingMachineServiceLayer myService = new 
-            VendingMachineServiceLayerImpl(myDao, myAuditDao );
-        
-        UserIO myIO = new UserIOConsoleImpl();
-        VendingMachineView myView = new VendingMachineView(myIO);
-
-        VendingMachineController controller = new 
-            VendingMachineController(myService, myView);
-        
-        controller.run();
+//        VendingMachineDao myDao = new VendingMachineDaoFileImpl();
+//        
+//        VendingMachineAuditDao myAuditDao = 
+//                new VendingMachineAuditDaoFileImpl();
+//        
+//        VendingMachineServiceLayer myService = new 
+//            VendingMachineServiceLayerImpl(myDao, myAuditDao );
+//        
+//        UserIO myIO = new UserIOConsoleImpl();
+//        VendingMachineView myView = new VendingMachineView(myIO);
+//
+//        VendingMachineController controller = new 
+//            VendingMachineController(myService, myView);
+//        
+//        controller.run();
 
     }
 }

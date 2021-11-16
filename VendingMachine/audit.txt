@@ -2,3 +2,8 @@
 2021-11-15T14:44:41.320408400 : Dispensed item Juice, $2.15, 1 units left
 2021-11-15T14:45:59.553450300 : Dispensed item Water, $1.50, 1 units left
 2021-11-16T11:52:15.069962 : Dispensed item Coffee, $2.00, 4 units left
+2021-11-16T14:31:26.577302500 : Dispensed item Coffee, $2.00, 3 units left
+2021-11-16T15:08:52.000150 : Dispensed item Chips, $3.99, 1 units left
+2021-11-16T15:16:13.241745600 : Dispensed item Snack Bar, $2.50, 2 units left
+2021-11-16T15:28:55.094065200 : Dispensed item Chocolate, $3.99, 3 units left
+2021-11-16T15:29:09.667207900 : Dispensed item Coffee, $2.00, 2 units left
