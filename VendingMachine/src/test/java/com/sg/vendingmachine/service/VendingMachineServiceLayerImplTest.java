@@ -5,6 +5,8 @@
  */
 package com.sg.vendingmachine.service;
 
+import com.sg.vendingmachine.dao.VendingMachineAuditDao;
+import com.sg.vendingmachine.dao.VendingMachineAuditDaoFileImpl;
 import com.sg.vendingmachine.dao.VendingMachineDao;
 import com.sg.vendingmachine.dao.VendingMachineDaoException;
 import com.sg.vendingmachine.dao.VendingMachineDaoFileImpl;
@@ -29,6 +31,7 @@ public class VendingMachineServiceLayerImplTest {
         
     VendingMachineDao testDao;
     VendingMachineServiceLayer testService;
+    VendingMachineAuditDao testAudit;
             
 
     
@@ -48,7 +51,8 @@ public class VendingMachineServiceLayerImplTest {
         
         String testFile = "testVendingMachine.txt";
         testDao = new VendingMachineDaoFileImpl(testFile);
-        testService = new VendingMachineServiceLayerImpl(testDao);
+        testAudit = new VendingMachineAuditDaoFileImpl();
+        testService = new VendingMachineServiceLayerImpl(testDao, testAudit);
     }
     
     @AfterEach
@@ -66,6 +70,7 @@ public class VendingMachineServiceLayerImplTest {
         String returnedBalanceMoneyToString = returnedBalanceMoney.
                 getBalance().toString();
         
+        System.out.println("Here");
         assertEquals(balanceMoneyToString, 
                 returnedBalanceMoneyToString);
     }
