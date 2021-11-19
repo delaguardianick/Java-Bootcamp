@@ -5,6 +5,8 @@
  */
 package com.sg.flooringmastery.dto;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author Gordak
@@ -12,7 +14,7 @@ package com.sg.flooringmastery.dto;
 public class State {
     private String stateAbv;
     private String stateFull;
-    private String taxRate;
+    private BigDecimal taxRate;
 
     public State(String stateAbv){
         this.stateAbv = stateAbv;
@@ -26,12 +28,12 @@ public class State {
         this.stateFull = stateFull;
     }
 
-    public String getTaxRate() {
+    public BigDecimal getTaxRate() {
         return taxRate;
     }
 
     public void setTaxRate(String taxRate) {
-        this.taxRate = taxRate;
+        this.taxRate = new BigDecimal(taxRate);
     }
     
     

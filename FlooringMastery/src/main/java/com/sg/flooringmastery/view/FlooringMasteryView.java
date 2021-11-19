@@ -77,12 +77,22 @@ public class FlooringMasteryView {
     }
     
     private String requestOrderState(){
-        return "";
+        return io.readString("Enter state abreviation (ex. TX): ");
+    }
+    
+    private void requestProductType(){
+//       print all products in product list
+//      ask for an input number, return the product string it corresponds to
     }
     
     private Double requestOrderArea(){
         return io.readDouble("Enter area in sq ft.(min: 100)", 100, 
                 Double.POSITIVE_INFINITY);
+    }
+    
+     public void displayErrorMessage(String errorMsg){
+        io.print("===ERROR===");
+        io.print(errorMsg);       
     }
     
     

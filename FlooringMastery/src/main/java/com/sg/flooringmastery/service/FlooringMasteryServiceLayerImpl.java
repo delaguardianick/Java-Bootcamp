@@ -6,6 +6,9 @@
 package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dao.FlooringMasteryDao;
+import com.sg.flooringmastery.dao.FlooringMasteryDaoException;
+import com.sg.flooringmastery.dto.State;
+import java.util.List;
 
 /**
  *
@@ -18,6 +21,11 @@ public class FlooringMasteryServiceLayerImpl
 
     public FlooringMasteryServiceLayerImpl(FlooringMasteryDao dao) {
         this.dao = dao;
+    }
+
+    @Override
+    public List<State> getAllStates() throws FlooringMasteryDaoException {
+        return dao.getAllStates();
     }
     
 }

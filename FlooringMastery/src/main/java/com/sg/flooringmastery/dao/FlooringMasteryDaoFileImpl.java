@@ -5,11 +5,13 @@
  */
 package com.sg.flooringmastery.dao;
 
+import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -23,6 +25,8 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     private final String DELIMITER = ",";
     
     ArrayList<State> states ;
+    ArrayList<Product> products ;
+
 
 //    private final String TAXES_FILE;    
 //    private final String PRODUCTS_FILE;
@@ -42,7 +46,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
                     new FileReader(TAXES_FILE)));
         }
         catch(FileNotFoundException e){
-            throw new FlooringMasteryDaoException("File not found"); 
+            throw new FlooringMasteryDaoException("Taxes file not found"); 
         }
         
         states = new ArrayList<>();
@@ -64,9 +68,51 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         sc.close();
     }
     
+    @Override
+    public void loadProducts() throws FlooringMasteryDaoException{
+        Scanner sc;
+        
+        try {
+            sc = new Scanner(
+                new BufferedReader(
+                    new FileReader(PRODUCTS_FILE)));
+        }
+        catch(FileNotFoundException e){
+            throw new FlooringMasteryDaoException("Product file not found"); 
+        }
+        
+        products = new ArrayList<>();
+        sc.nextLine();
+        while(sc.hasNextLine()){
+            String currLine = sc.nextLine();
+            String[] productTokens = unmarshallItem(currLine);
+            
+            String productType = productTokens[0];
+            String costPerSquareFoot = productTokens[1];
+            String laborCostPerSquareFoot = productTokens[2];
+            
+            Product newProduct = new Product(productType);
+            newProduct.setCostPerSquareFoot(costPerSquareFoot);
+            newProduct.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
+            
+            products.add(newProduct);
+        }
+        sc.close();
+    }
+    
     public String[] unmarshallItem(String line){
         String[] lineTokens = line.split(DELIMITER);
         return lineTokens;
+    }
+    
+    public List<State> getAllStates() throws FlooringMasteryDaoException{
+        loadStates();
+        return states;
+    }
+    
+     public List<Product> getAllProducts() throws FlooringMasteryDaoException{
+        loadProducts();
+        return products;
     }
     
 }

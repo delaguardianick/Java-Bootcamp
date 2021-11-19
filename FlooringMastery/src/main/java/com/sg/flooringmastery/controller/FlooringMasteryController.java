@@ -5,8 +5,13 @@
  */
 package com.sg.flooringmastery.controller;
 
+import com.sg.flooringmastery.dao.FlooringMasteryDaoException;
+import com.sg.flooringmastery.dto.State;
 import com.sg.flooringmastery.service.FlooringMasteryServiceLayer;
 import com.sg.flooringmastery.view.FlooringMasteryView;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -71,7 +76,24 @@ public class FlooringMasteryController {
             
     */
     public void addAnOrder(){
+        
+        List<State> states = getAllStates();
+//        for (State state : states){
+//            System.out.println(state.getStateFull());
+//        }
         view.requestOrderInfo();
+    }
+    
+    public List<State> getAllStates(){
+        
+        List<State> states = null;
+        
+        try {
+            states = service.getAllStates();
+        } catch (FlooringMasteryDaoException ex) {
+            view.displayErrorMessage("Cannot load states list");
+        }
+        return states;
     }
     
 }

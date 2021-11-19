@@ -5,6 +5,9 @@
  */
 package com.sg.flooringmastery.dao;
 
+import com.sg.flooringmastery.dto.State;
+import java.util.List;
+
 /**
  *
  * @author Gordak
@@ -12,5 +15,9 @@ package com.sg.flooringmastery.dao;
 public interface FlooringMasteryDao {
     
     public void loadStates() throws FlooringMasteryDaoException;
+
+    public List<State> getAllStates() throws FlooringMasteryDaoException;
+    
+    public void loadProducts() throws FlooringMasteryDaoException;
 
 }
