@@ -5,6 +5,9 @@
  */
 package com.sg.flooringmastery.view;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class UserIOConsoleImpl implements UserIO {
@@ -36,6 +39,27 @@ public class UserIOConsoleImpl implements UserIO {
     public String readString(String msgPrompt) {
         System.out.println(msgPrompt);
         return console.nextLine();
+    }
+    
+    @Override
+    public LocalDate readDate(String msgPrompt) {
+        System.out.println(msgPrompt);
+        LocalDate dateAsObject = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        
+        boolean invalidInput = true;
+        
+        while (invalidInput){
+            try {
+                String dateAsString = console.nextLine();
+                dateAsObject = LocalDate.parse(dateAsString, formatter);
+                invalidInput = false;
+            }catch(DateTimeParseException e){
+                System.out.println("Enter Date in future (MM/DD/YYYY) "
+                        + "- check format");
+            }
+        }
+        return dateAsObject;
     }
 
     /**

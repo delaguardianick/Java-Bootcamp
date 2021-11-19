@@ -11,4 +11,6 @@ package com.sg.flooringmastery.dao;
  */
 public interface FlooringMasteryDao {
     
+    public void loadStates() throws FlooringMasteryDaoException;
+
 }

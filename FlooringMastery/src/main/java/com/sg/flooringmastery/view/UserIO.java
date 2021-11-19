@@ -5,6 +5,8 @@
  */
 package com.sg.flooringmastery.view;
 
+import java.time.LocalDate;
+
 public interface UserIO {
     void print(String msg);
     
@@ -25,5 +27,7 @@ public interface UserIO {
     long readLong(String prompt, long min, long max);
     
     String readString(String prompt);
+    
+    LocalDate readDate(String prompt);
 }
 
