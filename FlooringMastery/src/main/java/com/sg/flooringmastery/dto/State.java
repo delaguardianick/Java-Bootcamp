@@ -20,6 +20,14 @@ public class State {
         this.stateAbv = stateAbv;
     }
 
+    public String getStateAbv() {
+        return stateAbv;
+    }
+
+    public void setStateAbv(String stateAbv) {
+        this.stateAbv = stateAbv;
+    }
+
     public String getStateFull() {
         return stateFull;
     }

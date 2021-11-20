@@ -11,7 +11,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -24,8 +26,8 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     private final String PRODUCTS_FILE = "Data/Products.txt";
     private final String DELIMITER = ",";
     
-    ArrayList<State> states ;
-    ArrayList<Product> products ;
+    Map<String, State> states ;
+    Map <String, Product> products ;
 
 
 //    private final String TAXES_FILE;    
@@ -49,7 +51,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
             throw new FlooringMasteryDaoException("Taxes file not found"); 
         }
         
-        states = new ArrayList<>();
+        states = new HashMap<>();
         sc.nextLine();
         while(sc.hasNextLine()){
             String currLine = sc.nextLine();
@@ -63,7 +65,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
             newState.setStateFull(stateFull);
             newState.setTaxRate(taxRate);
             
-            states.add(newState);
+            states.put(stateAbv, newState);
         }
         sc.close();
     }
@@ -81,7 +83,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
             throw new FlooringMasteryDaoException("Product file not found"); 
         }
         
-        products = new ArrayList<>();
+        products = new HashMap<>();
         sc.nextLine();
         while(sc.hasNextLine()){
             String currLine = sc.nextLine();
@@ -95,24 +97,43 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
             newProduct.setCostPerSquareFoot(costPerSquareFoot);
             newProduct.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
             
-            products.add(newProduct);
+            products.put(productType, newProduct);
         }
         sc.close();
     }
     
+    @Override
     public String[] unmarshallItem(String line){
         String[] lineTokens = line.split(DELIMITER);
         return lineTokens;
     }
     
-    public List<State> getAllStates() throws FlooringMasteryDaoException{
+    @Override
+    public List<State> getAllStatesObjects() throws FlooringMasteryDaoException{
         loadStates();
-        return states;
+        return new ArrayList<State>(states.values());
     }
     
+    @Override
+    public List<String> getAllStatesAbvs() throws FlooringMasteryDaoException{
+        loadStates();
+        return new ArrayList<String>(states.keySet());
+    }
+    
+    @Override
      public List<Product> getAllProducts() throws FlooringMasteryDaoException{
         loadProducts();
-        return products;
+        return new ArrayList<Product>(products.values());
     }
+     
+     @Override
+     public State getState(String stateAbv){
+         return states.get(stateAbv);
+     }
+     
+     @Override
+     public Product getProduct(String productType){
+         return products.get(productType);
+     }
     
 }

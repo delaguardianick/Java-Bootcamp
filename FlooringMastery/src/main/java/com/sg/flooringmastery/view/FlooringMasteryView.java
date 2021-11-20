@@ -5,9 +5,11 @@
  */
 package com.sg.flooringmastery.view;
 
+import com.sg.flooringmastery.dto.Product;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  *
@@ -37,17 +39,18 @@ public class FlooringMasteryView {
     public int requestForMenuChoice(){
         return io.readInt("Please choose a menu option", 1, 6);
     }
-
-    public void requestOrderInfo() {
-//        Order date:
-        LocalDate orderDate = requestOrderDate();
-        
-        String orderCustomerName = requestOrderCustomerName();
-        
-        String orderState = requestOrderState();
-    }
+//
+//    public void requestOrderInfo() {
+////        Order date:
+//        LocalDate orderDate = requestOrderDate();
+//        
+//        String orderCustomerName = requestOrderCustomerName();
+//        
+//        String orderState = requestOrderState();
+//        
+//    }
     
-    private LocalDate requestOrderDate(){
+    public LocalDate requestOrderDate(){
         
 //        io.print("INPUT ORDER DATE (IN THE FUTURE)");
 //        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
@@ -63,7 +66,7 @@ public class FlooringMasteryView {
         return orderDate;
     }
 
-    private String requestOrderCustomerName() {
+    public String requestOrderCustomerName() {
         
         String regex = "^[a-zA-Z., ]*$";
         String customerName = "";
@@ -76,18 +79,35 @@ public class FlooringMasteryView {
         return customerName;
     }
     
-    private String requestOrderState(){
+    public String requestOrderState(){
         return io.readString("Enter state abreviation (ex. TX): ");
     }
     
-    private void requestProductType(){
-//       print all products in product list
-//      ask for an input number, return the product string it corresponds to
+    public Product requestProductType(List<Product> products){
+        int size = products.size();
+        String prompt = String.format("Choose a product (1 - %d)", size);
+        int productIndex = io.readInt(prompt, 1, size);
+        return products.get(productIndex-1);
     }
     
-    private Double requestOrderArea(){
+    public Double requestOrderArea(){
         return io.readDouble("Enter area in sq ft.(min: 100)", 100, 
                 Double.POSITIVE_INFINITY);
+    }
+    
+    public void displayProducts(List<Product> productList){
+        io.print("Choose a product from below");
+        int count = 1;
+        for (Product prod : productList){
+            String toPrint = String.format("%d. %s: $%s/sqf :, "
+                    + "$%s labor/sqft",
+                    count,
+                    prod.getProductType(), 
+                    prod.getCostPerSquareFoot().toString(), 
+                    prod.getLaborCostPerSquareFoot().toString());
+            count++;
+            io.print(toPrint);
+        }
     }
     
      public void displayErrorMessage(String errorMsg){

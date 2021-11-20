@@ -5,6 +5,7 @@
  */
 package com.sg.flooringmastery.dao;
 
+import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
 import java.util.List;
 
@@ -16,8 +17,20 @@ public interface FlooringMasteryDao {
     
     public void loadStates() throws FlooringMasteryDaoException;
 
-    public List<State> getAllStates() throws FlooringMasteryDaoException;
-    
+    public List<State> getAllStatesObjects() throws FlooringMasteryDaoException;
+
+    public List<Product> getAllProducts() throws FlooringMasteryDaoException;
+
     public void loadProducts() throws FlooringMasteryDaoException;
+    
+    public List<String> getAllStatesAbvs() throws FlooringMasteryDaoException;
+    
+    public String[] unmarshallItem(String line);
+    
+    public State getState(String stateAbv);
+
+    public Product getProduct(String productType);
+
+
 
 }

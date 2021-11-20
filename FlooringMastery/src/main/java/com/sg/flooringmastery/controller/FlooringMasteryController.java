@@ -6,9 +6,12 @@
 package com.sg.flooringmastery.controller;
 
 import com.sg.flooringmastery.dao.FlooringMasteryDaoException;
+import com.sg.flooringmastery.dto.Order;
+import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
 import com.sg.flooringmastery.service.FlooringMasteryServiceLayer;
 import com.sg.flooringmastery.view.FlooringMasteryView;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,11 +80,74 @@ public class FlooringMasteryController {
     */
     public void addAnOrder(){
         
+       
+
+    }
+    
+    public void requestOrderInfo(){
         List<State> states = getAllStates();
-//        for (State state : states){
-//            System.out.println(state.getStateFull());
-//        }
-        view.requestOrderInfo();
+        List<Product> products = getAllProducts();
+
+        LocalDate orderDate = view.requestOrderDate();
+        
+        String orderCustomerName = view.requestOrderCustomerName();
+        
+        State orderState = requestOrderState();
+        
+        displayProductList(products);
+        Product orderProduct = requestOrderProductType(products);
+        
+        Double orderArea = view.requestOrderArea();
+
+//      ------------------------
+        Order newOrder = createNewOrder(orderDate, orderCustomerName,
+                orderState, orderProduct, orderArea);
+
+    }
+    
+    public Order createNewOrder(LocalDate orderDate, String orderCustomerName,
+            State orderState, Product orderProduct, Double orderArea){
+        
+        Order newOrder = new Order();
+        newOrder.setDate(orderDate);
+        newOrder.setCustomerName(orderCustomerName);
+        newOrder.setState(orderState.getStateFull());
+        newOrder.setProductType(orderProduct.getProductType());
+        newOrder.setArea(orderArea.toString());
+        
+        newOrder.setCostPerSquareFoot(orderProduct.getCostPerSquareFoot());
+        newOrder.setLaborCostPerSquareFoot(orderProduct.getLaborCostPerSquareFoot());
+        newOrder.setTaxRate(orderState.getTaxRate());
+        
+        return newOrder;
+    }
+    
+    public Product requestOrderProductType(List<Product> products){
+        return view.requestProductType(products);
+    }
+    
+    public State requestOrderState(){
+        
+        String orderStateAbv = null;
+        do{
+            orderStateAbv = view.requestOrderState();
+        }while(!verifyState(orderStateAbv));
+        
+        return service.getState(orderStateAbv);
+    }
+    
+    public Boolean verifyState(String orderStateAbv){
+        
+        try {
+            return service.isStateVerified(orderStateAbv);
+        } catch (FlooringMasteryDaoException ex) {
+            view.displayErrorMessage("Can't verify state");
+        }
+        return false;
+    }
+    
+    public void displayProductList(List<Product> products){
+        view.displayProducts(products);
     }
     
     public List<State> getAllStates(){
@@ -91,9 +157,20 @@ public class FlooringMasteryController {
         try {
             states = service.getAllStates();
         } catch (FlooringMasteryDaoException ex) {
-            view.displayErrorMessage("Cannot load states list");
+            view.displayErrorMessage("Could not load states list");
         }
         return states;
+    }
+    
+    public List<Product> getAllProducts(){
+        List<Product> products = null;
+        
+        try{
+            products = service.getAllProducts();
+        }catch(FlooringMasteryDaoException e){
+            view.displayErrorMessage("Could not load product list");
+        }
+        return products;
     }
     
 }

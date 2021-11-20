@@ -20,6 +20,15 @@ public class Product {
         this.productType = productType;
     }
 
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    
     public BigDecimal getCostPerSquareFoot() {
         return costPerSquareFoot;
     }
