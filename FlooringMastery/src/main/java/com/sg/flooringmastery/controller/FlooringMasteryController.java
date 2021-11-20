@@ -80,7 +80,7 @@ public class FlooringMasteryController {
     */
     public void addAnOrder(){
         
-       
+       requestOrderInfo();
 
     }
     
