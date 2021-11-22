@@ -6,6 +6,7 @@
 package com.sg.flooringmastery.dto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 /**
@@ -155,5 +156,7 @@ public class Order {
         calcTotal();
     }
     
-    
+    public static BigDecimal asTwoDecimals(BigDecimal money){
+        return money.setScale(2, RoundingMode.HALF_UP);
+    }
 }

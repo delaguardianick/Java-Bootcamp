@@ -7,9 +7,12 @@ package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dao.FlooringMasteryDao;
 import com.sg.flooringmastery.dao.FlooringMasteryDaoException;
+import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -61,5 +64,25 @@ public class FlooringMasteryServiceLayerImpl
     public Product getProduct(String productType) {
         return dao.getProduct(productType);
     }
+
+    @Override
+    public void addToOrders(Order newOrder) {
+        dao.addToOrders(newOrder);
+    }
+    
+    @Override
+    public List<Order> getAllOrders(){
+        return dao.getAllOrders();
+    }
+
+    @Override
+    public void saveOrder(Order newOrder){
+            try {
+                dao.saveOrder(newOrder);
+            } catch (FlooringMasteryDaoException ex) {
+                System.out.println("Couldnt save order");
+            }
+    }
+
     
 }

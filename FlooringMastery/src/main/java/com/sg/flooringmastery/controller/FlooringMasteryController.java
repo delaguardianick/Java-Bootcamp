@@ -38,6 +38,8 @@ public class FlooringMasteryController {
         switch(userChoice){
             case 1:
 //                Display Orders
+                displayOrders();
+                
                 break;
             case 2: 
 //                Add an order
@@ -65,6 +67,12 @@ public class FlooringMasteryController {
     public int userMenuChoice(){
         return view.requestForMenuChoice();
     }
+    
+    
+    public void displayOrders(){
+        List<Order> listOfOrders = service.getAllOrders();
+        view.displayAllOrders(listOfOrders);
+    }
 
     /*
     Request:
@@ -80,11 +88,16 @@ public class FlooringMasteryController {
     */
     public void addAnOrder(){
         
-       requestOrderInfo();
+       Order newOrder = requestOrderInfo();
+       newOrder.calcOrderFields();
+//       service.addToOrders(newOrder);
+       view.displayOrderSummary(newOrder);
+       Boolean userResp = view.confirmSaveOrder();
+       service.saveOrder(newOrder);
 
     }
     
-    public void requestOrderInfo(){
+    public Order requestOrderInfo(){
         List<State> states = getAllStates();
         List<Product> products = getAllProducts();
 
@@ -102,6 +115,8 @@ public class FlooringMasteryController {
 //      ------------------------
         Order newOrder = createNewOrder(orderDate, orderCustomerName,
                 orderState, orderProduct, orderArea);
+        
+        return newOrder;
 
     }
     
@@ -111,7 +126,7 @@ public class FlooringMasteryController {
         Order newOrder = new Order();
         newOrder.setDate(orderDate);
         newOrder.setCustomerName(orderCustomerName);
-        newOrder.setState(orderState.getStateFull());
+        newOrder.setState(orderState.getStateAbv());
         newOrder.setProductType(orderProduct.getProductType());
         newOrder.setArea(orderArea.toString());
         

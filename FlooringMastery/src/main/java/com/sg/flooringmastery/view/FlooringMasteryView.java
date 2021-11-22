@@ -5,6 +5,7 @@
  */
 package com.sg.flooringmastery.view;
 
+import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +50,10 @@ public class FlooringMasteryView {
 //        String orderState = requestOrderState();
 //        
 //    }
+    
+    public void displayAllOrders(List<Order> listOfOrders){
+        
+    }
     
     public LocalDate requestOrderDate(){
         
@@ -115,7 +120,36 @@ public class FlooringMasteryView {
         io.print(errorMsg);       
     }
     
+    public void displayOrderSummary(Order newOrder){
+        io.print("=== Calculating fields.. Displaying order summary ===");
+        io.print(String.format("Order Number %d: \nDate: %s\nCustomer Name: %s\nProduct type: "
+                + "%s\nTax Rate: %s\nTotal: $%s",
+                newOrder.getOrderNumber(),
+                newOrder.getDate().toString(),
+                newOrder.getCustomerName(),
+                newOrder.getProductType(),
+                newOrder.getTaxRate().toString(),
+                newOrder.asTwoDecimals(newOrder.getTotal()).toString()));
+    }
     
+    public Boolean confirmSaveOrder(){
+        String userResp = io.readString("Would you like to save this"
+                + " order? (Y/N)");
+        
+        switch (userResp){
+            case "Y": 
+                io.print("Order saved");
+                return true;
+                
+            case "N":
+                io.print("Order not saved");
+                return false;
+            
+            default:
+                io.print("Order not saved");
+                return false;
+        }
+    }
     
     
 }

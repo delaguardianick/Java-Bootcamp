@@ -6,6 +6,7 @@
 package com.sg.flooringmastery.service;
 
 import com.sg.flooringmastery.dao.FlooringMasteryDaoException;
+import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
 import java.util.List;
@@ -27,6 +28,12 @@ public interface FlooringMasteryServiceLayer {
     public State getState(String stateAbv);
 
     public Product getProduct(String productType);
+
+    public void addToOrders(Order newOrder);
+
+    public List<Order> getAllOrders();
+
+    public void saveOrder(Order newOrder);
 
     
 }

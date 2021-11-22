@@ -5,11 +5,16 @@
  */
 package com.sg.flooringmastery.dao;
 
+import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +28,14 @@ import java.util.Scanner;
 public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     
     private final String TAXES_FILE = "Data/Taxes.txt";    
-    private final String PRODUCTS_FILE = "Data/Products.txt";
+    private final String PRODUCTS_FILE = "Data/Products.txt";    
+    private final String ORDERS_PATH = "Orders/";
+
     private final String DELIMITER = ",";
     
     Map<String, State> states ;
     Map <String, Product> products ;
+    Map <Integer, Order> orders;
 
 
 //    private final String TAXES_FILE;    
@@ -37,6 +45,16 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
 //        this.TAXES_FILE = taxesFile;
 //        this.PRODUCTS_FILE = productsFile;
 //    }
+    
+    @Override
+    public List<Order> getAllOrders(){
+        return new ArrayList<Order>(orders.values());
+    }
+    
+    @Override
+    public void addToOrders(Order newOrder){
+        orders.put(newOrder.getOrderNumber(), newOrder);
+    }
     
     @Override
     public void loadStates() throws FlooringMasteryDaoException{
@@ -135,5 +153,63 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
      public Product getProduct(String productType){
          return products.get(productType);
      }
+     
+     @Override
+     public void saveOrder(Order newOrder) throws FlooringMasteryDaoException{
+         
+         String orderDate = newOrder.getDate().
+                 format(DateTimeFormatter.ofPattern("MMddYYYY"));
+         
+         String filePath = ORDERS_PATH + "Orders_" + orderDate;
+         
+         PrintWriter out;
+        
+         try {
+             out = new PrintWriter(new FileWriter(filePath, true));
+             
+         } catch (IOException e) {
+             throw new FlooringMasteryDaoException("Couldn't save to file");
+         }
+         
+         String orderAsString = marshallOrder(newOrder);
+         out.println(orderAsString);
+         out.flush();
+         out.close();
+         
+//         
+//        List<Item> allItems = getAllItems();
+//        for (Item itemAsObject : allItems){
+//            String itemAsText = marshallItem(itemAsObject);
+//            
+//            out.println(itemAsText);
+//            out.flush();
+//        }
+//        out.close();
+     }
     
+     
+     public String marshallOrder(Order newOrder){
+         
+        int orderNum = newOrder.getOrderNumber();
+        String customerName = newOrder.getCustomerName();
+        String stateAbv = newOrder.getState();
+        String taxRate = Order.asTwoDecimals(newOrder.getTaxRate()).toString();
+        String productType =  newOrder.getProductType();
+        String area = Order.asTwoDecimals(newOrder.getArea()).toString();
+        String costPerSqFt = Order.asTwoDecimals(newOrder.getCostPerSquareFoot()).toString();
+        String laborCostPerSqFt = Order.asTwoDecimals(newOrder.getLaborCostPerSquareFoot()).toString();
+        String materialCost = Order.asTwoDecimals(newOrder.getMaterialCost()).toString();
+        String laborCost = Order.asTwoDecimals(newOrder.getLaborCost()).toString();
+        String tax = Order.asTwoDecimals(newOrder.getTax()).toString();
+        String total = Order.asTwoDecimals(newOrder.getTotal()).toString();
+        
+        return String.format("%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s",
+                orderNum, customerName,
+                stateAbv, taxRate,
+                productType, area,
+                costPerSqFt, laborCostPerSqFt,
+                materialCost, laborCost,
+                tax, total);
+        
+     }
 }
