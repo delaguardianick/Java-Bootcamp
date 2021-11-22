@@ -14,6 +14,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,10 +159,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
      @Override
      public void saveOrder(Order newOrder) throws FlooringMasteryDaoException{
          
-         String orderDate = newOrder.getDate().
-                 format(DateTimeFormatter.ofPattern("MMddYYYY"));
-         
-         String filePath = ORDERS_PATH + "Orders_" + orderDate;
+        String filePath = getFilePathForOrderDate(newOrder.getDate());
          
          PrintWriter out;
         
@@ -176,15 +175,14 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
          out.flush();
          out.close();
          
-//         
-//        List<Item> allItems = getAllItems();
-//        for (Item itemAsObject : allItems){
-//            String itemAsText = marshallItem(itemAsObject);
-//            
-//            out.println(itemAsText);
-//            out.flush();
-//        }
-//        out.close();
+     }
+     
+     public String getFilePathForOrderDate(LocalDate date){
+          String orderDate = date.
+                 format(DateTimeFormatter.ofPattern("MMddYYYY"));
+         
+         String filePath = ORDERS_PATH + "Orders_" + orderDate;
+         return filePath;
      }
     
      
@@ -203,13 +201,84 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         String tax = Order.asTwoDecimals(newOrder.getTax()).toString();
         String total = Order.asTwoDecimals(newOrder.getTotal()).toString();
         
-        return String.format("%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s",
+        return String.format("%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
                 orderNum, customerName,
                 stateAbv, taxRate,
                 productType, area,
                 costPerSqFt, laborCostPerSqFt,
                 materialCost, laborCost,
                 tax, total);
+     }
+     
+     public Order unmarshallOrder(String orderAsText, LocalDate date){
+         String[] orderTokens = orderAsText.split(",");
+         
+         System.out.println(orderTokens.toString());
+         
+        int orderNumber = Integer.parseInt(orderTokens[0]);
+        String customerName = orderTokens[1];
+        State state = new State(orderTokens[2]);
+        String taxRate = orderTokens[3];
+        Product productType = new Product(orderTokens[4]);
+        String area = orderTokens[5];
+        String costPerSqFt = orderTokens[6];
+        String laborCostPerSqFt = orderTokens[7];
         
+        String materialCost = orderTokens[8];
+        String laborCost = orderTokens[9];
+        String tax = orderTokens[10];
+        String total = orderTokens[11];
+        
+        Order newOrder = createNewOrder(date, customerName,
+                state, productType, Double.valueOf(area));
+        
+//        newOrder.setTaxRate(new BigDecimal(taxRate)); 
+        newOrder.setTotal(new BigDecimal(Double.valueOf(total)));
+
+        return newOrder;
+
+     }
+     
+     public Order createNewOrder(LocalDate orderDate, String orderCustomerName,
+            State orderState, Product orderProduct, Double orderArea){
+        
+        Order newOrder = new Order();
+        newOrder.setDate(orderDate);
+        newOrder.setCustomerName(orderCustomerName);
+        newOrder.setState(orderState.getStateAbv());
+        newOrder.setProductType(orderProduct.getProductType());
+        newOrder.setArea(orderArea.toString());
+        
+        newOrder.setCostPerSquareFoot(orderProduct.getCostPerSquareFoot());
+        newOrder.setLaborCostPerSquareFoot(orderProduct.getLaborCostPerSquareFoot());
+        newOrder.setTaxRate(orderState.getTaxRate());
+        
+        return newOrder;
+    }
+     
+     public List<Order> displayOrdersForThisDate(LocalDate date) 
+             throws FlooringMasteryDaoException{
+         
+         ArrayList<Order> ordersForDate = new ArrayList<>();
+         String filePath = getFilePathForOrderDate(date);
+         
+         Scanner sc;
+        
+        try {
+            sc = new Scanner(
+                new BufferedReader(
+                    new FileReader(filePath)));
+        }
+        catch(FileNotFoundException e){
+            throw new FlooringMasteryDaoException("File not found"); 
+        }
+        
+        while(sc.hasNextLine()){
+            String currLine = sc.nextLine();
+            Order currOrder = unmarshallOrder(currLine, date);
+            ordersForDate.add(currOrder);
+        }
+        sc.close();
+        return ordersForDate;
      }
 }

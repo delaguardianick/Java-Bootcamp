@@ -149,6 +149,10 @@ public class Order {
         this.total = this.materialCost.add(this.laborCost).add(this.tax);
     }
     
+    public void setTotalString(String total){
+        this.total = new BigDecimal(total);
+    }
+    
     public void calcOrderFields(){
         calcMaterialCost();
         calcLaborCost();
@@ -159,4 +163,26 @@ public class Order {
     public static BigDecimal asTwoDecimals(BigDecimal money){
         return money.setScale(2, RoundingMode.HALF_UP);
     }
+
+    public void setArea(BigDecimal area) {
+        this.area = area;
+    }
+
+    public void setMaterialCost(BigDecimal materialCost) {
+        this.materialCost = materialCost;
+    }
+
+    public void setLaborCost(BigDecimal laborCost) {
+        this.laborCost = laborCost;
+    }
+
+    public void setTax(BigDecimal tax) {
+        this.tax = tax;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+    
+    
 }

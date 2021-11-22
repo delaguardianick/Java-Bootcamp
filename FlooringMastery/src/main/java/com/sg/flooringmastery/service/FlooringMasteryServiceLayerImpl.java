@@ -10,6 +10,7 @@ import com.sg.flooringmastery.dao.FlooringMasteryDaoException;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,6 +84,21 @@ public class FlooringMasteryServiceLayerImpl
                 System.out.println("Couldnt save order");
             }
     }
+    
+    @Override
+    public Order createNewOrder(LocalDate orderDate, String orderCustomerName, 
+            State orderState, Product orderProduct, Double orderArea){
+        
+        return dao.createNewOrder(orderDate,
+                orderCustomerName, orderState, orderProduct, orderArea);
+    }
+    
+    @Override
+    public List<Order> displayOrdersForThisDate(LocalDate date) 
+             throws FlooringMasteryDaoException{
+        return dao.displayOrdersForThisDate(date);
+    }
+
 
     
 }

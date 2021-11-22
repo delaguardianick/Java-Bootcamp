@@ -8,6 +8,7 @@ package com.sg.flooringmastery.dao;
 import com.sg.flooringmastery.dto.Order;
 import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -38,7 +39,9 @@ public interface FlooringMasteryDao {
     
     public void saveOrder(Order newOrder) throws FlooringMasteryDaoException;
 
+    public Order createNewOrder(LocalDate orderDate, String orderCustomerName,
+            State orderState, Product orderProduct, Double orderArea);
 
-
-
+    public List<Order> displayOrdersForThisDate(LocalDate date) 
+             throws FlooringMasteryDaoException;
 }

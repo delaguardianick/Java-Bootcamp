@@ -32,13 +32,21 @@ public class FlooringMasteryController {
     }
 
     public void run() {
-        displayMenu();
         
-        int userChoice = userMenuChoice();
-        switch(userChoice){
+        Boolean stillRunning = true;
+        while(stillRunning){
+            displayMenu();
+            int userChoice = userMenuChoice();
+            
+            switch(userChoice){
             case 1:
 //                Display Orders
-                displayOrders();
+                try {
+                    displayOrders();
+                    stillRunning = false;
+                }catch(FlooringMasteryDaoException e){
+                    view.displayErrorMessage("Records not found");
+                }
                 
                 break;
             case 2: 
@@ -57,6 +65,7 @@ public class FlooringMasteryController {
             case 6:
 //               Quit
                 System.exit(0);
+            }
         }
     }
     
@@ -69,9 +78,17 @@ public class FlooringMasteryController {
     }
     
     
-    public void displayOrders(){
-        List<Order> listOfOrders = service.getAllOrders();
-        view.displayAllOrders(listOfOrders);
+    public void displayOrders() throws FlooringMasteryDaoException{
+        
+        LocalDate dateToSearch = view.requestOrderDate();
+        List<Order> ordersForDate = null;
+        try {
+            ordersForDate = service.displayOrdersForThisDate(dateToSearch);
+        } catch (FlooringMasteryDaoException ex) {
+            throw new FlooringMasteryDaoException("No orders for such date");
+        }
+        System.out.println(ordersForDate);
+        view.displayAllOrders(ordersForDate);
     }
 
     /*
@@ -113,29 +130,12 @@ public class FlooringMasteryController {
         Double orderArea = view.requestOrderArea();
 
 //      ------------------------
-        Order newOrder = createNewOrder(orderDate, orderCustomerName,
+        Order newOrder = service.createNewOrder(orderDate, orderCustomerName,
                 orderState, orderProduct, orderArea);
         
         return newOrder;
-
     }
     
-    public Order createNewOrder(LocalDate orderDate, String orderCustomerName,
-            State orderState, Product orderProduct, Double orderArea){
-        
-        Order newOrder = new Order();
-        newOrder.setDate(orderDate);
-        newOrder.setCustomerName(orderCustomerName);
-        newOrder.setState(orderState.getStateAbv());
-        newOrder.setProductType(orderProduct.getProductType());
-        newOrder.setArea(orderArea.toString());
-        
-        newOrder.setCostPerSquareFoot(orderProduct.getCostPerSquareFoot());
-        newOrder.setLaborCostPerSquareFoot(orderProduct.getLaborCostPerSquareFoot());
-        newOrder.setTaxRate(orderState.getTaxRate());
-        
-        return newOrder;
-    }
     
     public Product requestOrderProductType(List<Product> products){
         return view.requestProductType(products);

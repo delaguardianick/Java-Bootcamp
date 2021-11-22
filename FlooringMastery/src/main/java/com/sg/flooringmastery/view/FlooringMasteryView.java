@@ -52,7 +52,9 @@ public class FlooringMasteryView {
 //    }
     
     public void displayAllOrders(List<Order> listOfOrders){
-        
+        for (Order order : listOfOrders){
+            displayOrderSummary(order);
+        }
     }
     
     public LocalDate requestOrderDate(){
@@ -121,15 +123,17 @@ public class FlooringMasteryView {
     }
     
     public void displayOrderSummary(Order newOrder){
-        io.print("=== Calculating fields.. Displaying order summary ===");
-        io.print(String.format("Order Number %d: \nDate: %s\nCustomer Name: %s\nProduct type: "
-                + "%s\nTax Rate: %s\nTotal: $%s",
-                newOrder.getOrderNumber(),
+        io.print(String.format("\n=== Displaying summary for order %d: ===",
+                newOrder.getOrderNumber()));
+        io.print(String.format("Date: %s\nCustomer Name: %s"
+                + "\nProduct type: %s\n"
+                + "Total: $%s",
                 newOrder.getDate().toString(),
                 newOrder.getCustomerName(),
                 newOrder.getProductType(),
-                newOrder.getTaxRate().toString(),
                 newOrder.asTwoDecimals(newOrder.getTotal()).toString()));
+
+//                newOrder.getTaxRate().toString(),
     }
     
     public Boolean confirmSaveOrder(){
