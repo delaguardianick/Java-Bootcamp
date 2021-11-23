@@ -15,7 +15,6 @@ import java.time.LocalDate;
  */
 public class Order {
     
-    private static int id = 1;
     private Integer orderNumber;
     private LocalDate date;
     private String customerName;
@@ -33,15 +32,6 @@ public class Order {
     private BigDecimal total;
 
     public Order(){
-        this.orderNumber = id++;
-    }
-
-    public static int getId() {
-        return id;
-    }
-
-    public static void setId(int id) {
-        Order.id = id;
     }
 
     public Integer getOrderNumber() {

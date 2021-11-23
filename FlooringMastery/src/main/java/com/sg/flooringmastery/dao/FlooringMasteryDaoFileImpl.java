@@ -32,6 +32,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     private final String TAXES_FILE = "Data/Taxes.txt";    
     private final String PRODUCTS_FILE = "Data/Products.txt";    
     private final String ORDERS_PATH = "Orders/";
+    private final String ORDERCOUNT_FILE = "orderCount.txt";
 
     private final String DELIMITER = ",";
     
@@ -209,6 +210,40 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
                 materialCost, laborCost,
                 tax, total);
      }
+    
+     @Override
+     public int getLatestOrderNumber() 
+             throws FlooringMasteryDaoException{
+         
+        String filePath = ORDERS_PATH + ORDERCOUNT_FILE;
+        Scanner sc;
+        
+        try {
+            sc = new Scanner(
+                new BufferedReader(
+                    new FileReader(filePath)));
+        }
+        catch(FileNotFoundException e){
+            throw new FlooringMasteryDaoException("Product file not found"); 
+        }
+        
+        int latestOrderNumber = sc.nextInt();
+        
+        PrintWriter out;
+        
+         try {
+             out = new PrintWriter(new FileWriter(filePath));
+             
+         } catch (IOException e) {
+             throw new FlooringMasteryDaoException("Couldn't save to file");
+         }
+         
+        out.println(latestOrderNumber + 1);
+        out.flush();
+        out.close();
+        
+        return latestOrderNumber;
+     }
      
      public Order unmarshallOrder(String orderAsText, LocalDate date){
          String[] orderTokens = orderAsText.split(",");
@@ -233,6 +268,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
                 state, productType, Double.valueOf(area));
         
 //        newOrder.setTaxRate(new BigDecimal(taxRate)); 
+        newOrder.setOrderNumber(orderNumber);
         newOrder.setTotal(new BigDecimal(Double.valueOf(total)));
 
         return newOrder;
@@ -243,6 +279,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
             State orderState, Product orderProduct, Double orderArea){
         
         Order newOrder = new Order();
+//        newOrder.setOrderNumber(getLatestOrderNumber());
         newOrder.setDate(orderDate);
         newOrder.setCustomerName(orderCustomerName);
         newOrder.setState(orderState.getStateAbv());

@@ -89,8 +89,11 @@ public class FlooringMasteryServiceLayerImpl
     public Order createNewOrder(LocalDate orderDate, String orderCustomerName, 
             State orderState, Product orderProduct, Double orderArea){
         
-        return dao.createNewOrder(orderDate,
+        Order newOrder = dao.createNewOrder(orderDate,
                 orderCustomerName, orderState, orderProduct, orderArea);
+        
+        newOrder.setOrderNumber(getLatestOrderNumber());
+        return newOrder;
     }
     
     @Override
@@ -99,6 +102,14 @@ public class FlooringMasteryServiceLayerImpl
         return dao.displayOrdersForThisDate(date);
     }
 
-
+    @Override
+    public int getLatestOrderNumber(){
+        try {
+            return dao.getLatestOrderNumber();
+        } catch (FlooringMasteryDaoException ex) {
+            System.out.println("Can't get latest order number");
+            return -1;
+        }
+    }
     
 }

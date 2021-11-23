@@ -40,4 +40,6 @@ public interface FlooringMasteryServiceLayer {
 
     public List<Order> displayOrdersForThisDate(LocalDate date) 
              throws FlooringMasteryDaoException;
+
+    public int getLatestOrderNumber();
 }

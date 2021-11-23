@@ -16,6 +16,8 @@ import java.util.List;
  * @author Gordak
  */
 public interface FlooringMasteryDao {
+
+    public int getLatestOrderNumber() throws FlooringMasteryDaoException;
     
     public void loadStates() throws FlooringMasteryDaoException;
 
