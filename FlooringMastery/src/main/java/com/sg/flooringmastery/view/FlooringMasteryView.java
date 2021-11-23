@@ -57,6 +57,10 @@ public class FlooringMasteryView {
         }
     }
     
+    public int requestOrderNumber(){
+        return io.readInt("Enter the order number: ");
+    }
+    
     public LocalDate requestOrderDate(){
         
 //        io.print("INPUT ORDER DATE (IN THE FUTURE)");
@@ -155,5 +159,35 @@ public class FlooringMasteryView {
         }
     }
     
+    public void editOrderFields(Order currOrder){
+        String customerName = currOrder.getCustomerName();
+        String state = currOrder.getState();
+        String productType = currOrder.getProductType();
+        String area = currOrder.getArea().toString();
+        
+        String newCustomerName = io.readString(
+                String.format("Enter customer name (%s):", customerName));
+        String newState=  io.readString(String.format("Enter state (%s):", state));
+        String newProductType = io.readString(
+                String.format("Enter product type (%s):", productType));
+        String newArea = io.readString(String.format("Enter area (%s):", area));
+
+        if (newCustomerName != ""){
+            currOrder.setCustomerName(newCustomerName);
+        }
+        
+        if (newState != ""){
+            currOrder.setState(newState);
+        }
+        
+        if (newProductType != ""){
+            currOrder.setProductType(newProductType);
+        }
+        
+        if (newArea != ""){
+            currOrder.setArea(newArea);
+        }
+        
+    }
     
 }

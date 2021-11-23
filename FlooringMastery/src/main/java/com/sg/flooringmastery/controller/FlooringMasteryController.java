@@ -41,12 +41,12 @@ public class FlooringMasteryController {
             switch(userChoice){
             case 1:
 //                Display Orders
-                try {
+//                try {
                     displayOrders();
-                    stillRunning = false;
-                }catch(FlooringMasteryDaoException e){
-                    view.displayErrorMessage("Records not found");
-                }
+//                    stillRunning = false;
+//                }catch(FlooringMasteryDaoException e){
+//                    view.displayErrorMessage("Records not found");
+//                }
                 
                 break;
             case 2: 
@@ -55,6 +55,7 @@ public class FlooringMasteryController {
                 break;
             case 3:
 //                edit an order
+                editAnOrder();
                 break;
             case 4:
 //                remove an order
@@ -78,17 +79,26 @@ public class FlooringMasteryController {
     }
     
     
-    public void displayOrders() throws FlooringMasteryDaoException{
+    public void displayOrders() {
         
         LocalDate dateToSearch = view.requestOrderDate();
+        
+        List<Order> ordersForDate = displayOrdersForThisDate(dateToSearch);
+        view.displayAllOrders(ordersForDate);
+    }
+    
+    public List<Order> displayOrdersForThisDate(LocalDate dateToSearch){
+        
         List<Order> ordersForDate = null;
+
         try {
             ordersForDate = service.displayOrdersForThisDate(dateToSearch);
         } catch (FlooringMasteryDaoException ex) {
-            throw new FlooringMasteryDaoException("No orders for such date");
+//            throw new FlooringMasteryDaoException("No orders for such date");
+             view.displayErrorMessage("No orders for such date");
         }
-        System.out.println(ordersForDate);
-        view.displayAllOrders(ordersForDate);
+        
+        return ordersForDate;
     }
 
     /*
@@ -186,6 +196,32 @@ public class FlooringMasteryController {
             view.displayErrorMessage("Could not load product list");
         }
         return products;
+    }
+
+    private void editAnOrder(){
+        Order currOrder = getOrderToEdit();
+        
+        if (currOrder == null){
+            view.displayErrorMessage("No Order ID found for this date");
+            return;
+        }
+        
+        System.out.println(currOrder.getCustomerName());
+    }
+    
+    private Order getOrderToEdit() {
+        LocalDate date = view.requestOrderDate();
+        int orderNumber = view.requestOrderNumber();
+        
+        List<Order> ordersForThisDate = displayOrdersForThisDate(date);
+        
+        for (Order order : ordersForThisDate){
+            if (order.getOrderNumber() == orderNumber){
+                return order;
+            }
+        }
+        return null;
+        
     }
     
 }
