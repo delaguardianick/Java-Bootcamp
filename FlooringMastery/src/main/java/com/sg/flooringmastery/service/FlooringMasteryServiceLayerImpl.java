@@ -112,4 +112,13 @@ public class FlooringMasteryServiceLayerImpl
         }
     }
     
+    @Override
+    public void saveAllOrders(List<Order> ordersForThisDate){
+            try {
+                dao.saveAllOrders(ordersForThisDate);
+            } catch (FlooringMasteryDaoException ex) {
+                Logger.getLogger(FlooringMasteryServiceLayerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+
 }

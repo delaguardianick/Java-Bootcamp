@@ -42,4 +42,6 @@ public interface FlooringMasteryServiceLayer {
              throws FlooringMasteryDaoException;
 
     public int getLatestOrderNumber();
+
+    public void saveAllOrders(List<Order> ordersForThisDate);
 }

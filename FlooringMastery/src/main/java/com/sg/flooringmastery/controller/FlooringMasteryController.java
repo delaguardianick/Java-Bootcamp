@@ -58,6 +58,7 @@ public class FlooringMasteryController {
                 editAnOrder();
                 break;
             case 4:
+                removeAnOrder();
 //                remove an order
                 break;
             case 5:
@@ -206,7 +207,19 @@ public class FlooringMasteryController {
             return;
         }
         
-        System.out.println(currOrder.getCustomerName());
+        view.editOrderFields(currOrder);
+        String newState = view.editStateField(currOrder);
+        if (verifyState(newState)){
+            currOrder.setState(newState);
+        };
+    
+        
+        view.displayOrderSummary(currOrder);
+        if (view.confirmSaveOrder()){
+//            save to file
+        }
+        
+        
     }
     
     private Order getOrderToEdit() {
@@ -222,6 +235,27 @@ public class FlooringMasteryController {
         }
         return null;
         
+    }
+
+    private void removeAnOrder() {
+//        Order currOrder = getOrderToEdit();
+
+        LocalDate date = view.requestOrderDate();
+        int orderNumber = view.requestOrderNumber();
+
+        List<Order> ordersForThisDate = displayOrdersForThisDate(date);
+
+        for (Order currOrder : ordersForThisDate){
+            if (currOrder.getOrderNumber() == orderNumber){
+                view.displayOrderSummary(currOrder);
+                
+                if (view.confirmDeleteOrder()){
+                    ordersForThisDate.remove(currOrder);
+                    break;
+                }
+            }
+        }
+        service.saveAllOrders(ordersForThisDate);
     }
     
 }

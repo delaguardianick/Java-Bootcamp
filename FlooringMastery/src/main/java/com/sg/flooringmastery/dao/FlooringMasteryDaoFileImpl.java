@@ -178,6 +178,28 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
          
      }
      
+     @Override
+     public void saveAllOrders(List<Order> orders) throws FlooringMasteryDaoException{
+        
+         String filePath = getFilePathForOrderDate(orders.get(0).getDate());
+         
+         PrintWriter out;
+        
+         try {
+             out = new PrintWriter(new FileWriter(filePath));
+             
+         } catch (IOException e) {
+             throw new FlooringMasteryDaoException("Couldn't save to file");
+         }
+         
+         for (Order currOrder : orders){
+            String orderAsString = marshallOrder(currOrder);
+            out.println(orderAsString);
+            out.flush();
+         }
+        out.close();
+     }
+     
      public String getFilePathForOrderDate(LocalDate date){
           String orderDate = date.
                  format(DateTimeFormatter.ofPattern("MMddYYYY"));
@@ -209,6 +231,40 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
                 costPerSqFt, laborCostPerSqFt,
                 materialCost, laborCost,
                 tax, total);
+     }
+     
+     public Order unmarshallOrder(String orderAsText, LocalDate date){
+        String[] orderTokens = orderAsText.split(",");
+         
+        int orderNumber = Integer.parseInt(orderTokens[0]);
+        String customerName = orderTokens[1];
+        State state = new State(orderTokens[2]);
+        String taxRate = orderTokens[3];
+        Product productType = new Product(orderTokens[4]);
+        String area = orderTokens[5];
+        String costPerSqFt = orderTokens[6];
+        String laborCostPerSqFt = orderTokens[7];
+        
+        String materialCost = orderTokens[8];
+        String laborCost = orderTokens[9];
+        String tax = orderTokens[10];
+        String total = orderTokens[11];
+        
+        Order newOrder = createNewOrder(date, customerName,
+                state, productType, Double.valueOf(area));
+        
+        newOrder.setTaxRate(new BigDecimal(taxRate)); 
+        newOrder.setCostPerSquareFoot(new BigDecimal(costPerSqFt));
+        newOrder.setLaborCostPerSquareFoot(new BigDecimal(laborCostPerSqFt));
+        newOrder.setMaterialCost(new BigDecimal(materialCost));
+        newOrder.setLaborCost(new BigDecimal(laborCost));
+        newOrder.setTax(new BigDecimal(tax));
+
+        newOrder.setOrderNumber(orderNumber);
+        newOrder.setTotal(new BigDecimal(Double.valueOf(total)));
+
+        return newOrder;
+
      }
     
      @Override
@@ -245,35 +301,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         return latestOrderNumber;
      }
      
-     public Order unmarshallOrder(String orderAsText, LocalDate date){
-         String[] orderTokens = orderAsText.split(",");
-         
-         System.out.println(orderTokens.toString());
-         
-        int orderNumber = Integer.parseInt(orderTokens[0]);
-        String customerName = orderTokens[1];
-        State state = new State(orderTokens[2]);
-        String taxRate = orderTokens[3];
-        Product productType = new Product(orderTokens[4]);
-        String area = orderTokens[5];
-        String costPerSqFt = orderTokens[6];
-        String laborCostPerSqFt = orderTokens[7];
-        
-        String materialCost = orderTokens[8];
-        String laborCost = orderTokens[9];
-        String tax = orderTokens[10];
-        String total = orderTokens[11];
-        
-        Order newOrder = createNewOrder(date, customerName,
-                state, productType, Double.valueOf(area));
-        
-//        newOrder.setTaxRate(new BigDecimal(taxRate)); 
-        newOrder.setOrderNumber(orderNumber);
-        newOrder.setTotal(new BigDecimal(Double.valueOf(total)));
-
-        return newOrder;
-
-     }
+     
      
      public Order createNewOrder(LocalDate orderDate, String orderCustomerName,
             State orderState, Product orderProduct, Double orderArea){

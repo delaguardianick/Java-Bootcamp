@@ -161,33 +161,48 @@ public class FlooringMasteryView {
     
     public void editOrderFields(Order currOrder){
         String customerName = currOrder.getCustomerName();
-        String state = currOrder.getState();
-        String productType = currOrder.getProductType();
         String area = currOrder.getArea().toString();
         
         String newCustomerName = io.readString(
                 String.format("Enter customer name (%s):", customerName));
-        String newState=  io.readString(String.format("Enter state (%s):", state));
-        String newProductType = io.readString(
-                String.format("Enter product type (%s):", productType));
-        String newArea = io.readString(String.format("Enter area (%s):", area));
+        Double newArea = io.readDouble(String.format("Enter area (%s):", area)
+                , 0, Double.POSITIVE_INFINITY);
 
         if (newCustomerName != ""){
             currOrder.setCustomerName(newCustomerName);
         }
         
-        if (newState != ""){
-            currOrder.setState(newState);
+        if (newArea != 0.0){
+            currOrder.setArea(newArea.toString());
         }
-        
-        if (newProductType != ""){
-            currOrder.setProductType(newProductType);
-        }
-        
-        if (newArea != ""){
-            currOrder.setArea(newArea);
-        }
-        
     }
     
+    public String editStateField(Order currOrder){
+        String state = currOrder.getState();
+        String newState = io.readString(String.format(
+                "Enter state (%s):", state));
+        
+        return newState;
+
+    }
+    
+    public Boolean confirmDeleteOrder(){
+        String userResp = io.readString("Are you sure you want to delete this"
+                + " order? (Y/N)");
+        
+        switch (userResp){
+            case "Y": 
+                io.print("Order deleted");
+                return true;
+                
+            case "N":
+                io.print("Order not deleted");
+                return false;
+            
+            default:
+                io.print("Order not deleted");
+                return false;
+        }
+    }
+
 }

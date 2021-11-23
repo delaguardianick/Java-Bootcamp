@@ -46,4 +46,9 @@ public interface FlooringMasteryDao {
 
     public List<Order> displayOrdersForThisDate(LocalDate date) 
              throws FlooringMasteryDaoException;
+
+    public void saveAllOrders(List<Order> ordersForThisDate) 
+            throws FlooringMasteryDaoException;
+    
+    
 }
