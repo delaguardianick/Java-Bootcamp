@@ -25,7 +25,7 @@ public class FlooringMasteryView {
     }
 
     public void printMenu() {
-        io.print("*****************");
+        io.print("\n*****************");
         io.print("<<Flooring Program>>");
         io.print("1. Display Orders");     
         io.print("2. Add an Order");

@@ -199,42 +199,37 @@ public class FlooringMasteryController {
         return products;
     }
 
-    private void editAnOrder(){
-        Order currOrder = getOrderToEdit();
-        
-        if (currOrder == null){
-            view.displayErrorMessage("No Order ID found for this date");
-            return;
-        }
+    private void editThisOrder(Order currOrder){
         
         view.editOrderFields(currOrder);
         String newState = view.editStateField(currOrder);
         if (verifyState(newState)){
             currOrder.setState(newState);
         };
-    
+        view.displayErrorMessage("Couldn't update State - not available\n");
         
-        view.displayOrderSummary(currOrder);
-        if (view.confirmSaveOrder()){
-//            save to file
-        }
-        
-        
+        List<Product> products = getAllProducts();
+        view.displayProducts(products);
+        Product newProduct = view.requestProductType(products);
+        currOrder.setProductType(newProduct.getProductType());
     }
     
-    private Order getOrderToEdit() {
+    private void editAnOrder() {
         LocalDate date = view.requestOrderDate();
         int orderNumber = view.requestOrderNumber();
         
         List<Order> ordersForThisDate = displayOrdersForThisDate(date);
         
-        for (Order order : ordersForThisDate){
-            if (order.getOrderNumber() == orderNumber){
-                return order;
+        for (Order currOrder : ordersForThisDate){
+            if (currOrder.getOrderNumber() == orderNumber){
+                editThisOrder(currOrder);
+                view.displayOrderSummary(currOrder);
+                
+                if (view.confirmSaveOrder()){
+                     service.saveAllOrders(ordersForThisDate);
+                }
             }
         }
-        return null;
-        
     }
 
     private void removeAnOrder() {
