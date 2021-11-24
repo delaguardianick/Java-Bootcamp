@@ -31,10 +31,10 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     /*
     Paths for text files
     */
-    private final String TAXES_FILE = "Data/Taxes.txt";    
-    private final String PRODUCTS_FILE = "Data/Products.txt";    
-    private final String ORDERS_PATH = "Orders/";
-    private final String ORDERCOUNT_FILE = "orderCount.txt";
+    private final String TAXES_FILE;
+    private final String PRODUCTS_FILE;
+    private final String ORDERS_PATH;
+    private final String ORDERCOUNT_FILE;
 
     private final String DELIMITER = ",";
     
@@ -42,6 +42,21 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     Map <String, Product> products ;
     Map <Integer, Order> orders;
 
+    
+    public FlooringMasteryDaoFileImpl(String taxesFile, String productsFile,
+            String ordersPath, String orderCountFile){
+        TAXES_FILE = taxesFile;
+        PRODUCTS_FILE = productsFile;
+        ORDERS_PATH = ordersPath;
+        ORDERCOUNT_FILE = orderCountFile;
+    }
+    
+    public FlooringMasteryDaoFileImpl(){
+        TAXES_FILE = "Data/Taxes.txt";    
+        PRODUCTS_FILE = "Data/Products.txt";   
+        ORDERS_PATH = "Orders/";
+        ORDERCOUNT_FILE = "orderCount.txt";
+    }
     /*
     @returns a list of Order objects
     */
@@ -347,6 +362,24 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         return latestOrderNumber;
      }
      
+     @Override
+     public void resetOrderCount(int count) throws FlooringMasteryDaoException{
+         String filePath = ORDERS_PATH + ORDERCOUNT_FILE;
+         
+         PrintWriter out;
+        
+         try {
+             out = new PrintWriter(new FileWriter(filePath));
+             
+         } catch (IOException e) {
+             throw new FlooringMasteryDaoException("Couldn't save to file");
+         }
+         
+        out.println(count);
+        out.flush();
+        out.close();
+     }
+     
      /*
      @returns new Order object given different parameters
      */
@@ -400,4 +433,6 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         sc.close();
         return ordersForDate;
      }
+
+   
 }

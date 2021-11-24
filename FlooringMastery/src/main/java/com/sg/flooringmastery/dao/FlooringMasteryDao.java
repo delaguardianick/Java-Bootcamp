@@ -41,7 +41,7 @@ public interface FlooringMasteryDao {
     
     public void saveOrder(Order newOrder) throws FlooringMasteryDaoException;
 
-    public Order createNewOrder(LocalDate orderDate, String orderCustomerName,
+    public Order createNewOrder(LocalDate orderDate, String orderCustomerName, 
             State orderState, Product orderProduct, Double orderArea);
 
     public List<Order> displayOrdersForThisDate(LocalDate date) 
@@ -54,6 +54,6 @@ public interface FlooringMasteryDao {
     
     public Order unmarshallOrder(String orderAsText, LocalDate date);
 
-    public Order createNewOrder(LocalDate orderDate, String orderCustomerName);
+    public void resetOrderCount(int count) throws FlooringMasteryDaoException;
 
 }
