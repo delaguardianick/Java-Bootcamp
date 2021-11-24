@@ -9,10 +9,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
-/**
- *
- * @author Gordak
- */
+
+/*
+    Order object
+    Calculates some parameters according to others.
+*/
 public class Order {
     
     private Integer orderNumber;

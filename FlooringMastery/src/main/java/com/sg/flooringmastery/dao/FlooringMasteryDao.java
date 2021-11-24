@@ -50,5 +50,10 @@ public interface FlooringMasteryDao {
     public void saveAllOrders(List<Order> ordersForThisDate) 
             throws FlooringMasteryDaoException;
     
+    public String marshallOrder(Order newOrder);
     
+    public Order unmarshallOrder(String orderAsText, LocalDate date);
+
+    public Order createNewOrder(LocalDate orderDate, String orderCustomerName);
+
 }

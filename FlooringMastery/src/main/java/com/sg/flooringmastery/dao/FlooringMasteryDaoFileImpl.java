@@ -24,11 +24,13 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- *
  * @author Gordak
  */
 public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     
+    /*
+    Paths for text files
+    */
     private final String TAXES_FILE = "Data/Taxes.txt";    
     private final String PRODUCTS_FILE = "Data/Products.txt";    
     private final String ORDERS_PATH = "Orders/";
@@ -40,25 +42,26 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     Map <String, Product> products ;
     Map <Integer, Order> orders;
 
-
-//    private final String TAXES_FILE;    
-//    private final String PRODUCTS_FILE;
-    
-//    public FlooringMasteryDaoFileImpl(String taxesFile, String productsFile){
-//        this.TAXES_FILE = taxesFile;
-//        this.PRODUCTS_FILE = productsFile;
-//    }
-    
+    /*
+    @returns a list of Order objects
+    */
     @Override
     public List<Order> getAllOrders(){
         return new ArrayList<Order>(orders.values());
     }
     
+    /*
+    Adds an Order into the orders hashmap<id,Order>
+    */
     @Override
     public void addToOrders(Order newOrder){
         orders.put(newOrder.getOrderNumber(), newOrder);
     }
     
+    /*
+    Get states from Data/Taxes.txt 
+    Create State objects and add them to states HashMap<StateAbv,State>
+    */
     @Override
     public void loadStates() throws FlooringMasteryDaoException{
         Scanner sc;
@@ -91,6 +94,10 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         sc.close();
     }
     
+    /*
+    Reads all products from Data/Products.txt
+    Create Product objects and add them to products HashMap<prodType,Product>
+    */
     @Override
     public void loadProducts() throws FlooringMasteryDaoException{
         Scanner sc;
@@ -123,40 +130,62 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         sc.close();
     }
     
+    /*
+    Splits line with delimiter
+    Could be easily deleted
+    */
     @Override
     public String[] unmarshallItem(String line){
         String[] lineTokens = line.split(DELIMITER);
         return lineTokens;
     }
     
+    /*
+    @returns list of State objects
+    */
     @Override
     public List<State> getAllStatesObjects() throws FlooringMasteryDaoException{
         loadStates();
         return new ArrayList<State>(states.values());
     }
     
+    /*
+    @returns list of all states abreviations
+    */
     @Override
     public List<String> getAllStatesAbvs() throws FlooringMasteryDaoException{
         loadStates();
         return new ArrayList<String>(states.keySet());
     }
     
+    /*
+    @returns list of all Product objects
+    */
     @Override
      public List<Product> getAllProducts() throws FlooringMasteryDaoException{
         loadProducts();
         return new ArrayList<Product>(products.values());
     }
      
+     /*
+     @returns State object given state abreviation
+     */
      @Override
      public State getState(String stateAbv){
          return states.get(stateAbv);
      }
-     
+
+     /*
+     @returns Product object given productType
+     */
      @Override
      public Product getProduct(String productType){
          return products.get(productType);
      }
      
+     /*
+     Appends 1 order to the order file for the date of the object
+     */
      @Override
      public void saveOrder(Order newOrder) throws FlooringMasteryDaoException{
          
@@ -178,6 +207,11 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
          
      }
      
+     /*
+     Replaces order text file for that date with an updated version
+     Used for Edit and Delete methods
+     Takes a list of Orders and marshalls them to text
+     */
      @Override
      public void saveAllOrders(List<Order> orders) throws FlooringMasteryDaoException{
         
@@ -200,6 +234,11 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         out.close();
      }
      
+     /*
+     Creates filepath for all the different order LocalDate dates  
+     ex. 04/11/1999 -> Orders/Orders_11041999
+     @returns individual filepath
+     */
      public String getFilePathForOrderDate(LocalDate date){
           String orderDate = date.
                  format(DateTimeFormatter.ofPattern("MMddYYYY"));
@@ -208,7 +247,10 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
          return filePath;
      }
     
-     
+     /*
+     @returns string of marshalled Order
+     */
+     @Override
      public String marshallOrder(Order newOrder){
          
         int orderNum = newOrder.getOrderNumber();
@@ -233,6 +275,10 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
                 tax, total);
      }
      
+     /*
+     @returns Order object of unmarshalled string
+     */
+     @Override
      public Order unmarshallOrder(String orderAsText, LocalDate date){
         String[] orderTokens = orderAsText.split(",");
          
@@ -301,8 +347,10 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         return latestOrderNumber;
      }
      
-     
-     
+     /*
+     @returns new Order object given different parameters
+     */
+     @Override
      public Order createNewOrder(LocalDate orderDate, String orderCustomerName,
             State orderState, Product orderProduct, Double orderArea){
         
@@ -321,6 +369,12 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         return newOrder;
     }
      
+     /*
+     Gets all the Orders from a specific order file
+     Unmarshalls them, adds them to a list
+     @returns orders for a specific date
+     */
+     @Override
      public List<Order> displayOrdersForThisDate(LocalDate date) 
              throws FlooringMasteryDaoException{
          

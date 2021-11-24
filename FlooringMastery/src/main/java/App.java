@@ -8,16 +8,11 @@ import com.sg.flooringmastery.view.FlooringMasteryView;
 import com.sg.flooringmastery.view.UserIO;
 import com.sg.flooringmastery.view.UserIOConsoleImpl;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author Gordak
- */
+/*
+    Main driver of the app
+    Sets up all constructors and starts the controller
+*/
 public class App {
     public static void main(String[] args) {
         

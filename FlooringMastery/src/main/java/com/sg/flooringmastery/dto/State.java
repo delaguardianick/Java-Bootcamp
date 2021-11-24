@@ -4,12 +4,10 @@
  * and open the template in the editor.
  */
 package com.sg.flooringmastery.dto;
-
 import java.math.BigDecimal;
 
 /**
- *
- * @author Gordak
+ * State object
  */
 public class State {
     private String stateAbv;

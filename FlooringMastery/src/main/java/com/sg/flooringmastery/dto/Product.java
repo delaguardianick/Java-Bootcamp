@@ -8,8 +8,7 @@ package com.sg.flooringmastery.dto;
 import java.math.BigDecimal;
 
 /**
- *
- * @author Gordak
+ * Product object
  */
 public class Product {
     private String productType;

@@ -12,11 +12,8 @@ import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
  * @author Gordak
  */
 public class FlooringMasteryServiceLayerImpl 
@@ -43,6 +40,10 @@ public class FlooringMasteryServiceLayerImpl
         return dao.getAllStatesAbvs();
     }
 
+    /*
+    Verifies if state is in the list of available states
+    @returns weather the state is valid
+    */
     @Override
     public Boolean isStateVerified(String orderStateAbv) 
             throws FlooringMasteryDaoException {
@@ -76,6 +77,9 @@ public class FlooringMasteryServiceLayerImpl
         return dao.getAllOrders();
     }
 
+    /*
+    Handles exception
+    */
     @Override
     public void saveOrder(Order newOrder){
             try {
@@ -85,6 +89,11 @@ public class FlooringMasteryServiceLayerImpl
             }
     }
     
+    /*
+    Calls for Order object to be created 
+    and finds out the order number it should have !!
+    @returns the new order
+    */
     @Override
     public Order createNewOrder(LocalDate orderDate, String orderCustomerName, 
             State orderState, Product orderProduct, Double orderArea){
@@ -102,6 +111,7 @@ public class FlooringMasteryServiceLayerImpl
         return dao.displayOrdersForThisDate(date);
     }
 
+    
     @Override
     public int getLatestOrderNumber(){
         try {
@@ -117,7 +127,6 @@ public class FlooringMasteryServiceLayerImpl
             try {
                 dao.saveAllOrders(ordersForThisDate);
             } catch (FlooringMasteryDaoException ex) {
-                Logger.getLogger(FlooringMasteryServiceLayerImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
 
