@@ -11,15 +11,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- *
  * @author Gordak
  */
+
+@Component
 public class FlooringMasteryView {
         
         private UserIO io;
     
+    @Autowired
     public FlooringMasteryView(UserIO io){
         this.io = io;
     }

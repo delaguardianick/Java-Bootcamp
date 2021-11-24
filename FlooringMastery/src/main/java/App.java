@@ -7,6 +7,7 @@ import com.sg.flooringmastery.service.FlooringMasteryServiceLayerImpl;
 import com.sg.flooringmastery.view.FlooringMasteryView;
 import com.sg.flooringmastery.view.UserIO;
 import com.sg.flooringmastery.view.UserIOConsoleImpl;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 
 /*
@@ -16,19 +17,32 @@ import com.sg.flooringmastery.view.UserIOConsoleImpl;
 public class App {
     public static void main(String[] args) {
         
-//        String VMTextFile = "vendingMachine.txt";
-        FlooringMasteryDao myDao = new FlooringMasteryDaoFileImpl();
+        AnnotationConfigApplicationContext appContext =
+                new AnnotationConfigApplicationContext();
         
-        
-        FlooringMasteryServiceLayer myService = new 
-            FlooringMasteryServiceLayerImpl(myDao);
-        
-        UserIO myIO = new UserIOConsoleImpl();
-        FlooringMasteryView myView = new FlooringMasteryView(myIO);
-
-        FlooringMasteryController controller = new 
-            FlooringMasteryController(myService, myView);
+                appContext.scan("com.sg.flooringmastery");
+                appContext.refresh();
+                        
+                
+        FlooringMasteryController controller = appContext.
+                getBean("flooringMasteryController",
+                        FlooringMasteryController.class);
         
         controller.run();
+        
+//        String VMTextFile = "vendingMachine.txt";
+//        FlooringMasteryDao myDao = new FlooringMasteryDaoFileImpl();
+//        
+//        
+//        FlooringMasteryServiceLayer myService = new 
+//            FlooringMasteryServiceLayerImpl(myDao);
+//        
+//        UserIO myIO = new UserIOConsoleImpl();
+//        FlooringMasteryView myView = new FlooringMasteryView(myIO);
+//
+//        FlooringMasteryController controller = new 
+//            FlooringMasteryController(myService, myView);
+//        
+//        controller.run();
     }
 }

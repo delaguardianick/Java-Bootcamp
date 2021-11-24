@@ -12,15 +12,19 @@ import com.sg.flooringmastery.dto.Product;
 import com.sg.flooringmastery.dto.State;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Gordak
  */
+@Component
 public class FlooringMasteryServiceLayerImpl 
         implements FlooringMasteryServiceLayer {
     
         private FlooringMasteryDao dao;
-
+        
+    @Autowired
     public FlooringMasteryServiceLayerImpl(FlooringMasteryDao dao) {
         this.dao = dao;
     }
@@ -82,11 +86,11 @@ public class FlooringMasteryServiceLayerImpl
     */
     @Override
     public void saveOrder(Order newOrder){
-            try {
-                dao.saveOrder(newOrder);
-            } catch (FlooringMasteryDaoException ex) {
-                System.out.println("Couldnt save order");
-            }
+        try {
+            dao.saveOrder(newOrder);
+        } catch (FlooringMasteryDaoException ex) {
+            System.out.println("Couldnt save order");
+        }
     }
     
     /*

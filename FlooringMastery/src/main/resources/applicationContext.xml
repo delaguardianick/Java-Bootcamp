@@ -4,4 +4,23 @@
         xsi:schemaLocation="
                 http://www.springframework.org/schema/beans
                 http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+    <bean id="io" class="com.sg.vendingmachine.ui.UserIOConsoleImpl" />
+    <bean id="dao" class="com.sg.vendingmachine.dao.VendingMachineDaoFileImpl"/>
+    
+    <bean id="view" class="com.sg.vendingmachine.ui.VendingMachineView">
+        <constructor-arg ref="io" />
+    </bean>
+    
+    <bean id="service" 
+          class="com.sg.vendingmachine.service.VendingMachineServiceLayerImpl">
+        <constructor-arg ref="dao" />
+    </bean>
+    
+    <bean id="controller" 
+          class="com.sg.vendingmachine.controller.VendingMachineController">
+        <constructor-arg ref="service" />
+        <constructor-arg ref="view" />
+    </bean>
+
 </beans>

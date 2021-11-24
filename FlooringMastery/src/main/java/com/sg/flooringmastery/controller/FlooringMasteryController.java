@@ -13,15 +13,19 @@ import com.sg.flooringmastery.service.FlooringMasteryServiceLayer;
 import com.sg.flooringmastery.view.FlooringMasteryView;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Gordak
  */
+@Component
 public class FlooringMasteryController {
     
     private FlooringMasteryServiceLayer service;
     private FlooringMasteryView view;
 
+    @Autowired
     public FlooringMasteryController(FlooringMasteryServiceLayer service,
             FlooringMasteryView view) {
         this.service = service;
