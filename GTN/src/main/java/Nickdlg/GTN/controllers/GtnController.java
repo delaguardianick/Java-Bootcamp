@@ -5,17 +5,48 @@
  */
 package Nickdlg.GTN.controllers;
 
+import Nickdlg.GTN.models.Round;
+import Nickdlg.GTN.service.GTNService;
+import java.util.Set;
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/gtn")
 public class GtnController {
 
-    @GetMapping
+    private final GTNService service;
+    
+    public GtnController(GTNService service){
+        this.service = service;
+    }
+    
+    @PostMapping("/begin")
+    public ResponseEntity beginGame(){
+        String solution = service.generateSolution();
+
+//        Start game
+        int gameID = service.createGame(solution);
+        ResponseEntity response = new ResponseEntity(gameID, HttpStatus.CREATED);
+        return response;
+    }
+    
+    
+    @PostMapping("/guess")
+    public Round guess(@RequestBody Round jsonObj){
+        
+        return jsonObj;
+    }
+    
+    
+    @GetMapping("/helloworld")
     public String[] helloWorld() {
         String[] result = {"Hello", "World", "!"};
         return result;

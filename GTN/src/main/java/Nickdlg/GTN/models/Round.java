@@ -25,4 +25,70 @@ public class Round {
     public Round(){
         
     }
+
+    public int getRoundID() {
+        return roundID;
+    }
+
+    public void setRoundID(int roundID) {
+        this.roundID = roundID;
+    }
+
+    public int getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(int gameID) {
+        this.gameID = gameID;
+    }
+
+    public String getSolution() {
+        return solution;
+    }
+
+    public void setSolution(String solution) {
+        this.solution = solution;
+    }
+
+    public String getGuess() {
+        return guess;
+    }
+
+    public void setGuess(String guess) {
+        this.guess = guess;
+    }
+
+    public int getExactMatches() {
+        return exactMatches;
+    }
+
+    public void setExactMatches(int exactMatches) {
+        this.exactMatches = exactMatches;
+    }
+
+    public int getPartialMatches() {
+        return partialMatches;
+    }
+
+    public void setPartialMatches(int partialMatches) {
+        this.partialMatches = partialMatches;
+    }
+
+    public String getRoundResult() {
+        return roundResult;
+    }
+
+    public void setRoundResult(String roundResult) {
+        this.roundResult = roundResult;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
+    
+    
 }
