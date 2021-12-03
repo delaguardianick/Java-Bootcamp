@@ -59,20 +59,23 @@ public class GTNInMemoryService implements GTNService {
         int gameID = currRound.getGameID();
         Game currGame = dao.getGame(gameID);
         
-        String guess = currRound.getGuess();
         String solution = currGame.getSolution();
+        currRound.setSolution(solution);
         
-        calculateRoundResult(guess, solution, currRound);
+        calculateRoundResult(currRound);
         
 //        Add round to game
         currGame.addRound(currRound);
-        
+////        
         if (isGameFinished(currRound)){
             currGame.setFinished(Boolean.TRUE);
         }
     }
     
-    public void calculateRoundResult(String guess, String solution, Round currRound){
+    public void calculateRoundResult(Round currRound){
+        
+        String guess = currRound.getGuess();
+        String solution = currRound.getSolution();
         
         int exact = 0;
         int partial = 0;

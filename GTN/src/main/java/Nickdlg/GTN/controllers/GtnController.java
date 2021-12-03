@@ -48,13 +48,11 @@ public class GtnController {
     @PostMapping("/guess")
     public Round guess(@RequestBody Round currRound){
         
-        String guess = currRound.getGuess();
-        
-//        service.makeGuess(currRound);
+        service.makeGuess(currRound);
         
         return currRound;
     }
-    
+//    
     
     @GetMapping("/helloworld")
     public String[] helloWorld() {

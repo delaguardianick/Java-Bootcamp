@@ -5,6 +5,7 @@
  */
 package Nickdlg.GTN.models;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -15,13 +16,14 @@ public class Game {
     private static int count = 1;
     private int gameID;
     private String solution;
-    private Map<Integer, Round> rounds;
+    private ArrayList<Round> rounds;
     private Boolean finished;
     
     
     public Game(String solution){
         this.solution = solution;
         this.gameID = count++;
+        this.rounds = new ArrayList<Round>();
         this.finished = false;
     }
 
@@ -41,11 +43,11 @@ public class Game {
         this.solution = solution;
     }
 
-    public Map<Integer, Round> getRounds() {
+    public ArrayList<Round> getRounds() {
         return rounds;
     }
 
-    public void setRounds(Map<Integer, Round> rounds) {
+    public void setRounds(ArrayList<Round> rounds) {
         this.rounds = rounds;
     }
 
@@ -62,7 +64,8 @@ public class Game {
     }
     
     public void addRound(Round newRound){
-        int roundID = getNewRoundID();
-        rounds.put(newRound.getRoundID(), newRound);
+        newRound.setRoundID(getNewRoundID());
+        rounds.add(newRound);
+        
     }
 }
