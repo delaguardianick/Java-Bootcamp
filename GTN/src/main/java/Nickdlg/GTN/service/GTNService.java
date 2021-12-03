@@ -5,6 +5,8 @@
  */
 package Nickdlg.GTN.service;
 
+import Nickdlg.GTN.models.Round;
+
 /**
  *
  * @author Gordak
@@ -16,5 +18,7 @@ public interface GTNService {
     public int generateNumInRange(int min, int max);
 
     public int createGame(String solution);
+
+    public void makeGuess(Round currRound);
     
 }

@@ -34,15 +34,25 @@ public class GtnController {
 
 //        Start game
         int gameID = service.createGame(solution);
+        
         ResponseEntity response = new ResponseEntity(gameID, HttpStatus.CREATED);
         return response;
     }
     
-    
+    /*
+    {
+        "guess" : "2451",
+        "gameID" : 1
+    }
+    */
     @PostMapping("/guess")
-    public Round guess(@RequestBody Round jsonObj){
+    public Round guess(@RequestBody Round currRound){
         
-        return jsonObj;
+        String guess = currRound.getGuess();
+        
+//        service.makeGuess(currRound);
+        
+        return currRound;
     }
     
     

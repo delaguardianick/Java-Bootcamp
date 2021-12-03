@@ -6,6 +6,7 @@
 package Nickdlg.GTN.models;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -21,9 +22,15 @@ public class Round {
     private int partialMatches;
     private String roundResult;
     private LocalDateTime time;
+    private Boolean lastRound ;
     
     public Round(){
-        
+        this.time = LocalDateTime.now();
+        this.lastRound = false;
+    }
+    
+    public Round(int roundID){
+        this.roundID = roundID;
     }
 
     public int getRoundID() {
@@ -88,6 +95,14 @@ public class Round {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public Boolean getLastRound() {
+        return lastRound;
+    }
+
+    public void setLastRound(Boolean lastRound) {
+        this.lastRound = lastRound;
     }
     
     

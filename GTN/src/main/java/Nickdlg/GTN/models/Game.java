@@ -57,5 +57,12 @@ public class Game {
         this.finished = finished;
     }
     
+    public int getNewRoundID(){
+        return rounds.size() + 1;
+    }
     
+    public void addRound(Round newRound){
+        int roundID = getNewRoundID();
+        rounds.put(newRound.getRoundID(), newRound);
+    }
 }

@@ -5,10 +5,15 @@
  */
 package Nickdlg.GTN.data;
 
+import Nickdlg.GTN.models.Game;
+
 /**
  *
  * @author Gordak
  */
 public interface GTNDao {
     
+    public void addGame(Game newGame);
+    
+    public Game getGame(int gameId);
 }

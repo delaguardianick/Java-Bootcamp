@@ -15,13 +15,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @author Gordak
  */
 
-@Repository
-public class GTNDatabaseDao implements GTNDao {
-    
-    private final JdbcTemplate jdbcTemplate;
-    
-    @Autowired
-    public GTNDatabaseDao(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
-    }
-}
+//@Repository
+//public class GTNDatabaseDao implements GTNDao {
+//    
+//    private final JdbcTemplate jdbcTemplate;
+//    
+//    @Autowired
+//    public GTNDatabaseDao(JdbcTemplate jdbcTemplate){
+//        this.jdbcTemplate = jdbcTemplate;
+//    }
+//}
