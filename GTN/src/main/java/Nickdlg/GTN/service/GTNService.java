@@ -5,7 +5,9 @@
  */
 package Nickdlg.GTN.service;
 
+import Nickdlg.GTN.models.Game;
 import Nickdlg.GTN.models.Round;
+import java.util.List;
 
 /**
  *
@@ -20,5 +22,10 @@ public interface GTNService {
     public int createGame(String solution);
 
     public void makeGuess(Round currRound);
+    
+    public List<Game> getAllGames();
+
+    public Game getGame(int gameID);
+
     
 }

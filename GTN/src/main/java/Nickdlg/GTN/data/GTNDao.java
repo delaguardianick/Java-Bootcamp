@@ -6,6 +6,7 @@
 package Nickdlg.GTN.data;
 
 import Nickdlg.GTN.models.Game;
+import java.util.List;
 
 /**
  *
@@ -16,4 +17,6 @@ public interface GTNDao {
     public void addGame(Game newGame);
     
     public Game getGame(int gameId);
+    
+    public List<Game> getAllGames();
 }

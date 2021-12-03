@@ -8,6 +8,7 @@ package Nickdlg.GTN.service;
 import Nickdlg.GTN.data.GTNDao;
 import Nickdlg.GTN.models.Game;
 import Nickdlg.GTN.models.Round;
+import java.util.List;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -66,7 +67,7 @@ public class GTNInMemoryService implements GTNService {
         
 //        Add round to game
         currGame.addRound(currRound);
-////        
+        
         if (isGameFinished(currRound)){
             currGame.setFinished(Boolean.TRUE);
         }
@@ -106,6 +107,16 @@ public class GTNInMemoryService implements GTNService {
             return true;
         }
         return false;
+    }
+    
+    @Override
+    public List<Game> getAllGames(){
+        return dao.getAllGames();
+    }
+    
+    @Override
+    public Game getGame(int gameID){
+        return dao.getGame(gameID);
     }
     
 }
