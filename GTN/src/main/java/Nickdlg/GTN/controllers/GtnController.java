@@ -1,22 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Nickdlg.GTN.controllers;
 
 import Nickdlg.GTN.models.Game;
 import Nickdlg.GTN.models.Round;
 import Nickdlg.GTN.service.GTNService;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,11 +24,15 @@ public class GtnController {
         this.service = service;
     }
     
+    /*
+    Responds to a POST begin call
+    starts a new game
+    @returns 201 CREATED and gameID of new game
+    */
     @PostMapping("/begin")
     public ResponseEntity beginGame(){
         String solution = service.generateSolution();
 
-//        Start game
         int gameID = service.createGame(solution);
         
         ResponseEntity response = new ResponseEntity(gameID, HttpStatus.CREATED);
@@ -49,10 +40,15 @@ public class GtnController {
     }
     
     /*
-    {
-        "guess" : "2451",
-        "gameID" : 1
-    }
+    Input format JSON:
+        {
+            "guess" : "2451",
+            "gameID" : 1
+        }
+    
+    Responds to a POST guess call
+    makes a guess for the corresponding game
+    @returns filled round object, with results of round
     */
     @PostMapping("/guess")
     public Round guess(@RequestBody Round currRound){
@@ -62,56 +58,32 @@ public class GtnController {
         return currRound;
     }
     
+    /*
+    Displays all games, if game is not finished, hides the solution
+    @returns list of all games
+    */
     @GetMapping("/game")
     public List<Game> getAllGames() {
         return service.getAllGames();
     }
     
+    /*
+    Displays the game for a specific gameID
+    if game is not finished, hides the solution
+    @returns requested game
+    */
     @GetMapping("/game/{gameId}")
     public Game getGame(@PathVariable int gameId){
         return service.getGameToDisplay(gameId);
     }
     
+    /*
+    @returns all rounds of a specific game
+    */
     @GetMapping("/rounds/{gameId}")
     public List<Round> getRounds(@PathVariable int gameId){
-        List<Round> rounds = service.getAllRoundsForGame(gameId);
-//        List<LocalDateTime> roundTimes = rounds.stream().
-//                map((round) -> round.getTime()).
-//                collect(Collectors.toList());
-        
-//        Map<String, Round> jsonRounds = new HashMap<>();
-//        
-//        for (Round currRound : rounds){
-//            String roundTime = currRound.getTime().format(
-//                    DateTimeFormatter.ofLocalizedDateTime(
-//                            FormatStyle.MEDIUM, FormatStyle.MEDIUM));
-//            
-//            jsonRounds.put(roundTime, currRound);
-//        }
             
-        return rounds;
+        return service.getAllRoundsForGame(gameId);
     }
     
-    @PostMapping("/calculate")
-    public String calculate(int op1, String operator, int op2){
-        int result = 0;
-        switch (operator){
-            case "+":
-                result = op1 + op2;
-                break;
-            case "-":
-                result = op1 - op2;
-                break;
-            case "*":
-                result = op1 * op2;
-                break;
-            case "/":
-                result = op1 / op2;
-                break;
-            default:
-                String message = String.format("operator '%s' is invalid", operator);
-                throw new IllegalArgumentException(message);
-        }
-        return String.format("%s %s %s = %s", op1, operator, op2, result);
-    }
 }

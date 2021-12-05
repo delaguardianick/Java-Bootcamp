@@ -1,22 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Nickdlg.GTN.service;
 
 import Nickdlg.GTN.data.GTNDao;
 import Nickdlg.GTN.models.Game;
 import Nickdlg.GTN.models.Round;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author Gordak
- */
 @Repository
 public class GTNInMemoryService implements GTNService {
     
@@ -27,16 +16,25 @@ public class GTNInMemoryService implements GTNService {
         this.dao = dao;
     }
     
+    /*
+    Adds a new Game object to the database,
+    The gameID is assigned in the dao
+    @returns gameID
+    */
     @Override
     public int createGame(String solution){
         Game newGame = new Game(solution);
-        int gameID = newGame.getGameID();
         
         dao.addGame(newGame);
+        int gameID = newGame.getGameID();
         
         return gameID;
     }
 
+    /*
+    Generates a random 4 digit solution with all unique digits
+    @returns solution as string
+    */
     @Override
     public String generateSolution() {
         String solution = "";
@@ -52,45 +50,60 @@ public class GTNInMemoryService implements GTNService {
         return solution;
     }
     
+    /*
+    Helper for generateSolution()
+    @returns random number from min to max inclusive
+    */
     @Override
     public int generateNumInRange(int min, int max){
         return (int) ((Math.random() * (max - min)) + min);
     }
 
+    /*
+    Called by POST ("/guess")
+    Given Round with only gameID and a guess,
+    Compares guess to game solution and returns round result
+    Checks if game if solution is guessed, finishes game
+    Calls dao to add round to the database
+    */
     @Override
     public void makeGuess(Round currRound) {
+        
+        // Get the Game the round belongs to
         int gameID = currRound.getGameID();
         Game currGame = dao.getGame(gameID);
         
         if (currGame.getFinished()){
             currRound.setLastRound(Boolean.TRUE);
+//            Can throw exception saying game already finished,
+//            and no more rounds playable
         }
         
-        String solution = currGame.getSolution();
-        currRound.setSolution(solution);
-        
-        calculateRoundResult(currRound);
-        
-         if (currRound.getExactMatches() == currRound.getGuess().length())
-            {
-                currRound.setLastRound(true);
-                currGame.setFinished(true);
-            }
+        // Generate round results, add to round object
+        calculateRoundResult(currRound, currGame);
+        // Change to finished 
+        dao.updateGameStatus(currGame);
 
+        
 //      Add round to Database
         dao.addRound(currRound);
         
+//      Add roundID to GameRound table, associating it with a gameID
         int roundID = currRound.getRoundID();
         dao.addGameRound(gameID, roundID);
         
-        dao.updateGameStatus(currGame);
     }
     
-    public void calculateRoundResult(Round currRound){
+    /*
+    @params round and game it belongs to
+    Checks for exact and partial matches
+    Adds result to round object 
+    */
+    @Override
+    public void calculateRoundResult(Round currRound, Game currGame){
         
         String guess = currRound.getGuess();
-        String solution = currRound.getSolution();
-        
+        String solution = currGame.getSolution();
         int exact = 0;
         int partial = 0;
         
@@ -112,43 +125,41 @@ public class GTNInMemoryService implements GTNService {
         currRound.setPartialMatches(partial);
         currRound.setRoundResult(String.format("e:%dp:%d", exact, partial));
         
+        if (currRound.getExactMatches() == currRound.getGuess().length())
+            {
+                currRound.setLastRound(true);
+                currGame.setFinished(true);
+            }
     }
     
-    public Boolean isGameFinished(Round currRound){
-        if (currRound.getExactMatches() == currRound.getSolution().length()){
-            currRound.setLastRound(Boolean.TRUE);
-            return true;
-        }
-        return false;
-    }
-    
+    /*
+    @returns all games
+    */
     @Override
     public List<Game> getAllGames(){
         return dao.getAllGames();
     }
     
+    /*
+    searches game by gameID in database
+    @returns searched game
+    */
     @Override
     public Game getGame(int gameID){
         return dao.getGame(gameID);
     }
 
+    /*
+    Similar to getGame, but censors the solution if the game is unfinished
+    */
     @Override
     public Game getGameToDisplay(int gameID) {
         return dao.getGameToDisplay(gameID);
     }
     
-    @Override
-    public LocalDateTime convertStringToDate(String dateString){
-//        2021-12-04 20:33:36
-
-        DateTimeFormatter formatter = DateTimeFormatter.
-                ofPattern("yyyy-MM-dd HH:mm:ss");   
-
-        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
-        return dateTime;
-
-    }
-    
+    /*
+    @returns a list of all rounds for a specific gameID
+    */
     @Override
     public List<Round> getAllRoundsForGame(int gameID){
         return dao.getAllRoundsForGame(gameID);

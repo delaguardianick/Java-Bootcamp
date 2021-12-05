@@ -1,19 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Nickdlg.GTN.service;
 
 import Nickdlg.GTN.models.Game;
 import Nickdlg.GTN.models.Round;
-import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- *
- * @author Gordak
- */
+
 public interface GTNService {
 
     public String generateSolution();
@@ -30,8 +21,11 @@ public interface GTNService {
 
     public Game getGameToDisplay(int gameID);
     
-    public LocalDateTime convertStringToDate(String dateString);
+//    public LocalDateTime convertStringToDate(String dateString);
 
     public List<Round> getAllRoundsForGame(int gameID);
+    
+    public void calculateRoundResult(Round currRound, Game currGame);
+
 
 }

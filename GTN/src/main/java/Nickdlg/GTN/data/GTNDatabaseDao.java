@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Nickdlg.GTN.data;
 
 import Nickdlg.GTN.models.Game;
 import Nickdlg.GTN.models.Round;
-import Nickdlg.GTN.service.GTNService;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,11 +17,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 
-/**
- *
- * @author Gordak
- */
-
 @Repository
 public class GTNDatabaseDao implements GTNDao {
     
@@ -39,6 +27,9 @@ public class GTNDatabaseDao implements GTNDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /*
+    Adds game to database and generates gameID according to records
+    */
     @Override
     public void addGame(Game newGame) {
         final String sql = "INSERT INTO game(solution, finished)"
@@ -60,10 +51,12 @@ public class GTNDatabaseDao implements GTNDao {
         }, keyHolder);
         
         newGame.setGameID(keyHolder.getKey().intValue());
-//        MIGHT CAUSE PROBLEMS ^^
-//        return newGame;
     }
 
+    /*
+    searches a gameID in database
+    @returns requested Game object
+    */
     @Override
     public Game getGame(int gameID) {
         final String sql = "SELECT gameID, solution, finished "
@@ -71,7 +64,11 @@ public class GTNDatabaseDao implements GTNDao {
         
         return jdbcTemplate.queryForObject(sql, new GameMapper(), gameID);
     }
-    
+    /*
+    searches a gameID in database
+    if game is unfinished, solution is hidden (null)
+    @returns requested Game object 
+    */
     @Override
     public Game getGameToDisplay(int gameID){
          final String sql = "SELECT gameID, finished, "
@@ -81,6 +78,10 @@ public class GTNDatabaseDao implements GTNDao {
         return jdbcTemplate.queryForObject(sql, new GameMapper(), gameID);
     }
 
+    /*
+    @returns all games 
+    if game is unfinished, solution is hidden (null)
+    */
     @Override
     public List<Game> getAllGames() {
         final String sql = "SELECT GameID, finished, "
@@ -90,6 +91,10 @@ public class GTNDatabaseDao implements GTNDao {
         return jdbcTemplate.query(sql, new GameMapper());
     }
     
+    /*
+    Adds a round to database
+    Sets roundID according to next available roundID in database
+    */
     @Override
     public void addRound(Round newRound){
         final String sql = "INSERT INTO round(guess, exactMatches, "
@@ -118,6 +123,10 @@ public class GTNDatabaseDao implements GTNDao {
 //        return newRound;
     }
     
+    /*
+    Adds roundID and gameID to translation table
+    It associates each round with its corresponding game
+    */
     @Override 
     public void addGameRound(int gameID, int roundID){
         final String sql = "INSERT INTO GameRound(gameID, roundID)"
@@ -139,6 +148,10 @@ public class GTNDatabaseDao implements GTNDao {
         }, keyHolder);
     }
     
+    /*
+    Updates the 'finished' column to 1 if game is finished
+    @returns true if succesfully updated
+    */
     @Override
     public boolean updateGameStatus(Game currGame){
         
@@ -149,9 +162,12 @@ public class GTNDatabaseDao implements GTNDao {
         return jdbcTemplate.update(sql,
                 currGame.getFinished(),
                 currGame.getGameID()) > 0;
-
     }
     
+    /*
+    Uses intermediary table to display all the rounds for a gameID
+    @returns all rounds of a game
+    */
     @Override
     public List<Round> getAllRoundsForGame(int gameID){
         final String sql = "select * "
@@ -164,6 +180,14 @@ public class GTNDatabaseDao implements GTNDao {
         
     }
     
+    /*
+    RowMapper is used to translate the jbdcTemplate query result 
+    into the appropiate object its supposed to represent
+    
+    GameMapper creates a new Game object from the Game db table.
+    
+    RoundMapper creates a new Round object from the Round db table.
+    */
     private static final class GameMapper implements RowMapper<Game> {
         
         @Override
@@ -184,14 +208,12 @@ public class GTNDatabaseDao implements GTNDao {
             Round newRound = new Round();
             newRound.setRoundID(rs.getInt("roundID"));
             newRound.setGameID(rs.getInt("gameID"));
-            newRound.setSolution(rs.getString("solution"));
             newRound.setGuess(rs.getString("guess"));
             newRound.setExactMatches(rs.getInt("exactMatches"));
             newRound.setPartialMatches(rs.getInt("partialMatches"));
             newRound.setLastRound(rs.getBoolean("lastround"));
-
+            newRound.setRoundResult(rs.getString("roundResult"));
             String dateString = rs.getString("datenTime");
-//            service.convertStringToDate(dateString);
 
             DateTimeFormatter formatter = DateTimeFormatter.
                     ofPattern("yyyy-MM-dd HH:mm:ss");   
