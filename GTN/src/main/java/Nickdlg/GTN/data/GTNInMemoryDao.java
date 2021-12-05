@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author Gordak
  */
-@Repository
+//@Repository
 public class GTNInMemoryDao implements GTNDao {
     
     private final Map<Integer, Game> games = new HashMap<>();
