@@ -69,28 +69,27 @@ public class GtnController {
     
     @GetMapping("/game/{gameId}")
     public Game getGame(@PathVariable int gameId){
-        return service.getGame(gameId);
+        return service.getGameToDisplay(gameId);
     }
     
     @GetMapping("/rounds/{gameId}")
-    public Map<String, Round> getRounds(@PathVariable int gameId){
-        Game currGame = service.getGame(gameId);
-        List<Round> rounds = currGame.getRounds();
+    public List<Round> getRounds(@PathVariable int gameId){
+        List<Round> rounds = service.getAllRoundsForGame(gameId);
 //        List<LocalDateTime> roundTimes = rounds.stream().
 //                map((round) -> round.getTime()).
 //                collect(Collectors.toList());
         
-        Map<String, Round> jsonRounds = new HashMap<>();
-        
-        for (Round currRound : rounds){
-            String roundTime = currRound.getTime().format(
-                    DateTimeFormatter.ofLocalizedDateTime(
-                            FormatStyle.MEDIUM, FormatStyle.MEDIUM));
+//        Map<String, Round> jsonRounds = new HashMap<>();
+//        
+//        for (Round currRound : rounds){
+//            String roundTime = currRound.getTime().format(
+//                    DateTimeFormatter.ofLocalizedDateTime(
+//                            FormatStyle.MEDIUM, FormatStyle.MEDIUM));
+//            
+//            jsonRounds.put(roundTime, currRound);
+//        }
             
-            jsonRounds.put(roundTime, currRound);
-        }
-            
-        return jsonRounds;
+        return rounds;
     }
     
     @PostMapping("/calculate")

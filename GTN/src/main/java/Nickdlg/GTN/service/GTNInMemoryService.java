@@ -8,6 +8,8 @@ package Nickdlg.GTN.service;
 import Nickdlg.GTN.data.GTNDao;
 import Nickdlg.GTN.models.Game;
 import Nickdlg.GTN.models.Round;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
@@ -60,20 +62,28 @@ public class GTNInMemoryService implements GTNService {
         int gameID = currRound.getGameID();
         Game currGame = dao.getGame(gameID);
         
+        if (currGame.getFinished()){
+            currRound.setLastRound(Boolean.TRUE);
+        }
+        
         String solution = currGame.getSolution();
         currRound.setSolution(solution);
         
         calculateRoundResult(currRound);
         
-//        Add round to game
+         if (currRound.getExactMatches() == currRound.getGuess().length())
+            {
+                currRound.setLastRound(true);
+                currGame.setFinished(true);
+            }
+
+//      Add round to Database
         dao.addRound(currRound);
         
         int roundID = currRound.getRoundID();
         dao.addGameRound(gameID, roundID);
         
-//        if (isGameFinished(currRound)){
-//            currGame.setFinished(Boolean.TRUE);
-//        }
+        dao.updateGameStatus(currGame);
     }
     
     public void calculateRoundResult(Round currRound){
@@ -121,5 +131,28 @@ public class GTNInMemoryService implements GTNService {
     public Game getGame(int gameID){
         return dao.getGame(gameID);
     }
+
+    @Override
+    public Game getGameToDisplay(int gameID) {
+        return dao.getGameToDisplay(gameID);
+    }
+    
+    @Override
+    public LocalDateTime convertStringToDate(String dateString){
+//        2021-12-04 20:33:36
+
+        DateTimeFormatter formatter = DateTimeFormatter.
+                ofPattern("yyyy-MM-dd HH:mm:ss");   
+
+        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+        return dateTime;
+
+    }
+    
+    @Override
+    public List<Round> getAllRoundsForGame(int gameID){
+        return dao.getAllRoundsForGame(gameID);
+    }
+
     
 }

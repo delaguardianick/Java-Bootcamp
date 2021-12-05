@@ -7,6 +7,7 @@ package Nickdlg.GTN.service;
 
 import Nickdlg.GTN.models.Game;
 import Nickdlg.GTN.models.Round;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -27,5 +28,10 @@ public interface GTNService {
 
     public Game getGame(int gameID);
 
+    public Game getGameToDisplay(int gameID);
     
+    public LocalDateTime convertStringToDate(String dateString);
+
+    public List<Round> getAllRoundsForGame(int gameID);
+
 }

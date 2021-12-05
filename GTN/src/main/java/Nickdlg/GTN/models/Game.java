@@ -16,7 +16,6 @@ public class Game {
     private static int count = 1;
     private int gameID;
     private String solution;
-    private ArrayList<Round> rounds;
     private Boolean finished;
     
     
@@ -27,7 +26,6 @@ public class Game {
     public Game(String solution){
         this.solution = solution;
         this.gameID = count++;
-        this.rounds = new ArrayList<Round>();
         this.finished = false;
     }
 
@@ -47,29 +45,11 @@ public class Game {
         this.solution = solution;
     }
 
-    public ArrayList<Round> getRounds() {
-        return rounds;
-    }
-
-    public void setRounds(ArrayList<Round> rounds) {
-        this.rounds = rounds;
-    }
-
     public Boolean getFinished() {
         return finished;
     }
 
     public void setFinished(Boolean finished) {
         this.finished = finished;
-    }
-    
-    public int getNewRoundID(){
-        return rounds.size() + 1;
-    }
-    
-    public void addRound(Round newRound){
-        newRound.setRoundID(getNewRoundID());
-        rounds.add(newRound);
-        
     }
 }
