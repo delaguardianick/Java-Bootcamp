@@ -66,11 +66,14 @@ public class GTNInMemoryService implements GTNService {
         calculateRoundResult(currRound);
         
 //        Add round to game
-        currGame.addRound(currRound);
+        dao.addRound(currRound);
         
-        if (isGameFinished(currRound)){
-            currGame.setFinished(Boolean.TRUE);
-        }
+        int roundID = currRound.getRoundID();
+        dao.addGameRound(gameID, roundID);
+        
+//        if (isGameFinished(currRound)){
+//            currGame.setFinished(Boolean.TRUE);
+//        }
     }
     
     public void calculateRoundResult(Round currRound){

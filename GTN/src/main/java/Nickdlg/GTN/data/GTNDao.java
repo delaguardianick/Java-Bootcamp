@@ -6,7 +6,9 @@
 package Nickdlg.GTN.data;
 
 import Nickdlg.GTN.models.Game;
+import Nickdlg.GTN.models.Round;
 import java.util.List;
+import org.springframework.jdbc.core.RowMapper;
 
 /**
  *
@@ -19,4 +21,9 @@ public interface GTNDao {
     public Game getGame(int gameId);
     
     public List<Game> getAllGames();
+
+    public void addRound(Round currRound);
+    
+    public void addGameRound(int roundID, int gameID);
+    
 }

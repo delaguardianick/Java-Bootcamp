@@ -20,6 +20,10 @@ public class Game {
     private Boolean finished;
     
     
+    public Game(){
+        this.finished = false;
+    }
+    
     public Game(String solution){
         this.solution = solution;
         this.gameID = count++;

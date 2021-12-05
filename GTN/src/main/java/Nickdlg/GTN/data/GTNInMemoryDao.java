@@ -17,23 +17,23 @@ import org.springframework.stereotype.Repository;
  * @author Gordak
  */
 //@Repository
-public class GTNInMemoryDao implements GTNDao {
-    
-    private final Map<Integer, Game> games = new HashMap<>();
-
-    @Override
-    public void addGame(Game newGame){
-        games.put(newGame.getGameID(), newGame);
-    }
-    
-    @Override
-    public List<Game> getAllGames(){
-        return new ArrayList<Game>(games.values());
-    }
-    
-    @Override
-    public Game getGame(int gameId){
-        Game currGame = games.get(gameId);
-        return currGame;
-    }
-}
+//public class GTNInMemoryDao implements GTNDao {
+//    
+//    private final Map<Integer, Game> games = new HashMap<>();
+//
+//    @Override
+//    public void addGame(Game newGame){
+//        games.put(newGame.getGameID(), newGame);
+//    }
+//    
+//    @Override
+//    public List<Game> getAllGames(){
+//        return new ArrayList<Game>(games.values());
+//    }
+//    
+//    @Override
+//    public Game getGame(int gameId){
+//        Game currGame = games.get(gameId);
+//        return currGame;
+//    }
+//}
