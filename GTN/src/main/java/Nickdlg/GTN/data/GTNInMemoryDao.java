@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
  * @author Gordak
  */
 //@Repository
+//@Profile("memory")
 //public class GTNInMemoryDao implements GTNDao {
 //    
 //    private final Map<Integer, Game> games = new HashMap<>();

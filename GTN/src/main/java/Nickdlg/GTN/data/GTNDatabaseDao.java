@@ -52,7 +52,7 @@ public class GTNDatabaseDao implements GTNDao {
         
         newGame.setGameID(keyHolder.getKey().intValue());
     }
-
+    
     /*
     searches a gameID in database
     @returns requested Game object
